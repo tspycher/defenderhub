@@ -12,12 +12,29 @@
 DefenderMenu::DefenderMenu(int rs, int enable, int d0, int d1, int d2, int d3) {
     pages[0] = new EnvironmentTemperature();
     pages[1] = new ObdOil();
-    //pages = {new EnvironmentTemperature(), new ObdOil()};
 
     lcd = new LiquidCrystal(rs, enable, d0, d1, d2, d3);
     lcd->begin(16, 2);
+}
+
+void DefenderMenu::welcome_screen(int delay_seconds) {
     lcd->setCursor(0, 0);
-    lcd->print("Welcome");
+    char const a[] = "  DEFENDER 110  ";
+    for (int i = 0; i < (int) (sizeof(a)-1); i++) {
+        lcd->setCursor(i, 0);
+        lcd->print(a[i]);
+        delay(100);
+    }
+
+    char const b[] = "one life,live it";
+    for (int i = 0; i < (int) (sizeof(b)-1); i++) {
+        lcd->setCursor(i, 1);
+        lcd->print(b[i]);
+        delay(100);
+    }
+
+    delay(delay_seconds*1000);
+    lcd->clear();
 }
 
 void DefenderMenu::update_lcd(void) {

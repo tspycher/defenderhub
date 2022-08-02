@@ -13,6 +13,7 @@
 class DefenderMenu {
 public:
     DefenderMenu(int rs=11, int enable=12, int d0=8, int d1=7, int d2=6, int d3=5);
+    void welcome_screen(int delay_seconds=2);
     void update_lcd(void);
     void switch_page();
 private:

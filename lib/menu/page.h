@@ -9,8 +9,8 @@
 
 class Page {
 public:
-    virtual String lcd_first_line();
-    virtual String lcd_second_line();
+    virtual String lcd_first_line() = 0;
+    virtual String lcd_second_line() = 0;
 };
 
 #endif //DEFENDERHUB_PAGE_H

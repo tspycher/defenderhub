@@ -17,6 +17,7 @@ void setup() {
     alive_led_state = LOW;
     Serial.begin(9600);
     Serial.println("started program");
+    defender_menu.welcome_screen();
 }
 
 void toggle_alive_led() {
