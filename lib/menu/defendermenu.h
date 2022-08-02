@@ -8,14 +8,19 @@
 #include "page.h"
 #include <LiquidCrystal.h>
 
+#define PAGES 2
 
 class DefenderMenu {
 public:
-    DefenderMenu(void);
+    DefenderMenu(int rs=11, int enable=12, int d0=8, int d1=7, int d2=6, int d3=5);
     void update_lcd(void);
+    void switch_page();
 private:
-    Page *pages[1];
+    int current_page = 0;
     LiquidCrystal *lcd;
+    Page *pages[PAGES];
+    int total_pages();
+
 };
 
 #endif //DEFENDERHUB_DEFENDERMENU_H

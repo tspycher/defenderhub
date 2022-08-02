@@ -1,10 +1,5 @@
-
 #include <Arduino.h>
-
-#include "environmentTemperature.h"
 #include "defendermenu.h"
-#include <time.h>
-
 
 #ifndef LED_BUILTIN
 #define LED_BUILTIN 13
@@ -14,9 +9,8 @@
 
 const int UPDATE_TIMER = 5;
 int alive_led_state;
-DefenderMenu lcd_menu;
+DefenderMenu defender_menu;
 
-//LiquidCrystal lcd(11, 12, 8, 7, 6, 5);
 
 void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
@@ -37,10 +31,9 @@ void toggle_alive_led() {
 }
 
 void loop() {
-    //if((millis()/100) % (UPDATE_TIMER*10) == 0) {
-        toggle_alive_led();
-        lcd_menu.update_lcd();
-    //}
+    toggle_alive_led();
+    defender_menu.update_lcd();
+    defender_menu.switch_page();
     delay(UPDATE_TIMER*1000);
 }
 
