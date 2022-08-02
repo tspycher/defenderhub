@@ -1,8 +1,8 @@
 
 #include <Arduino.h>
-#include <LiquidCrystal.h>
 
 #include "environmentTemperature.h"
+#include "defendermenu.h"
 #include <time.h>
 
 
@@ -14,9 +14,9 @@
 
 const int UPDATE_TIMER = 5;
 int alive_led_state;
+DefenderMenu lcd_menu;
 
-LiquidCrystal lcd(11, 12, 8, 7, 6, 5);
-EnvironmentTemperature envt(ONE_WIRE_BUS);
+//LiquidCrystal lcd(11, 12, 8, 7, 6, 5);
 
 void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
@@ -24,10 +24,6 @@ void setup() {
     alive_led_state = LOW;
     Serial.begin(9600);
     Serial.println("started program");
-
-    lcd.begin(16, 2);
-    lcd.setCursor(0, 0);
-    lcd.print("Welcome");
 }
 
 void toggle_alive_led() {
@@ -41,20 +37,11 @@ void toggle_alive_led() {
 }
 
 void loop() {
-    if((millis()/100) % (UPDATE_TIMER*10) != 0) {
-        // only perform operations every x seconds
-        return;
-    }
-    toggle_alive_led();
-
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Temp1: ");
-    lcd.print((double) envt.get_temperature_inside());
-    lcd.setCursor(0, 1);
-    lcd.print("Temp2: ");
-    lcd.print((double)  envt.get_temperature_outside());
-
+    //if((millis()/100) % (UPDATE_TIMER*10) == 0) {
+        toggle_alive_led();
+        lcd_menu.update_lcd();
+    //}
+    delay(UPDATE_TIMER*1000);
 }
 
 
