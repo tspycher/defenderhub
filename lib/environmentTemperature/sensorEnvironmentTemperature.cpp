@@ -5,17 +5,17 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
-#include "environmentTemperature.h"
+#include "sensorEnvironmentTemperature.h"
 
 
 
-EnvironmentTemperature::EnvironmentTemperature(int onewirebus){
+SensorEnvironmentTemperature::SensorEnvironmentTemperature(int onewirebus){
     oneWire = new OneWire(onewirebus);
     sensors = new DallasTemperature(oneWire);
     sensors->begin();
 }
 
-float EnvironmentTemperature::get_temperature_for_index(uint8_t index) {
+float SensorEnvironmentTemperature::get_temperature_for_index(uint8_t index) {
     sensors->requestTemperatures();
     float temp = sensors->getTempCByIndex(index);
     Serial.print("Requested Temperature at Index ");
@@ -23,14 +23,13 @@ float EnvironmentTemperature::get_temperature_for_index(uint8_t index) {
     Serial.print(" which reads ");
     Serial.print(temp);
     Serial.println("C");
-
     return temp;
 }
 
-float EnvironmentTemperature::get_temperature_outside() {
+float SensorEnvironmentTemperature::get_temperature_outside() {
     return get_temperature_for_index(INDEX_OUTSIDE);
 }
 
-float EnvironmentTemperature::get_temperature_inside() {
+float SensorEnvironmentTemperature::get_temperature_inside() {
     return get_temperature_for_index(INDEX_INSIDE);
 }

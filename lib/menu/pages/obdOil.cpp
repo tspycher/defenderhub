@@ -5,9 +5,9 @@
 #include "obdOil.h"
 
 String ObdOil::lcd_first_line() {
-    return "Oil Temp: 100°";
+    return "Oil Temp.: 100C";
 }
 
 String ObdOil::lcd_second_line() {
-    return "Oil Pressure: 200hpa";
+    return "Oil Pres.: 200hpa";
 }

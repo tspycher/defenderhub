@@ -5,7 +5,6 @@
 #define LED_BUILTIN 13
 
 #endif
-#define ONE_WIRE_BUS 2
 
 const int UPDATE_TIMER = 5;
 int alive_led_state;

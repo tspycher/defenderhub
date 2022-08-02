@@ -2,17 +2,17 @@
 // Created by Thomas Spycher on 02.08.22.
 //
 
-#ifndef DEFENDERHUB_ENVIRONMENTTEMPERATURE_H
-#define DEFENDERHUB_ENVIRONMENTTEMPERATURE_H
+#ifndef DEFENDERHUB_SENSORENVIRONMENTTEMPERATURE_H
+#define DEFENDERHUB_SENSORENVIRONMENTTEMPERATURE_H
 #include <DallasTemperature.h>
 #include <OneWire.h>
 
 
-class EnvironmentTemperature {
+class SensorEnvironmentTemperature {
     const uint8_t INDEX_OUTSIDE = 0;
     const uint8_t INDEX_INSIDE = 1;
 public:
-    EnvironmentTemperature(int onewirebus);
+    SensorEnvironmentTemperature(int onewirebus);
     float get_temperature_outside();
     float get_temperature_inside();
 protected:
@@ -22,5 +22,5 @@ protected:
 };
 
 
-#endif //DEFENDERHUB_ENVIRONMENTTEMPERATURE_H
+#endif //DEFENDERHUB_SENSORENVIRONMENTTEMPERATURE_H
 

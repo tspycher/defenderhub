@@ -3,11 +3,19 @@
 //
 
 #include "environmentTemperature.h"
+#include "sensorEnvironmentTemperature.h"
+
+
+EnvironmentTemperature::EnvironmentTemperature(int onewirebus) {
+    sensor = new SensorEnvironmentTemperature(onewirebus);
+}
 
 String EnvironmentTemperature::lcd_first_line() {
-    return "Blafasel";
+    float temperature = sensor->get_temperature_outside();
+    return "Outside: " + (String)temperature;
 }
 
 String EnvironmentTemperature::lcd_second_line() {
-    return "Dingdong";
+    float temperature = sensor->get_temperature_inside();
+    return "Inside: " + (String)temperature;
 }
