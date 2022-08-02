@@ -8,5 +8,6 @@ Final Solution/Product gets installed in a Land Rover Defender 110 2.4 Puma.
 ```
 pio project init --board uno --ide clion
 pio pkg install --library "paulstoffregen/OneWire@^2.3.7"
-pio pkg install --library "milesburton/DallasTemperature@^3.11.0"    
+pio pkg install --library "milesburton/DallasTemperature@^3.11.0"
+pio pkg install --library "arduino-libraries/LiquidCrystal@^1.0.7"    
 ```
