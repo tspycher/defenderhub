@@ -7,12 +7,19 @@
 
 #include <Arduino.h>
 
+#define PAGE_TYPE_STATIC = 0;
+#define PAGE_TYPE_GAUGE = 1;
+
+
 class Page {
 public:
     virtual ~Page() = default;
 
     virtual String lcd_first_line() = 0;
     virtual String lcd_second_line() = 0;
+    int get_page_type();
+protected:
+    int page_type = 0;
 };
 
 #endif //DEFENDERHUB_PAGE_H

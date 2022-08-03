@@ -9,14 +9,19 @@
 
 
 
-SensorEnvironmentTemperature::SensorEnvironmentTemperature(int onewirebus, uint8_t index_outside, uint8_t index_inside) : index_outside(index_outside), index_inside(index_inside){
+SensorEnvironmentTemperature::SensorEnvironmentTemperature(int onewirebus, uint8_t index_outside, uint8_t index_inside) : index_outside(index_outside), index_inside(index_inside) {
     oneWire = new OneWire(onewirebus);
     sensors = new DallasTemperature(oneWire);
     sensors->begin();
+    sensors->requestTemperatures();
+    last_sensor_update = millis();
 }
 
 float SensorEnvironmentTemperature::get_temperature_for_index(uint8_t index) {
-    sensors->requestTemperatures();
+    if ((long) (last_sensor_update - millis()) >= (long) (20 * 1000)) {
+        // only upldate the data from the sensors every 60 seconds
+        sensors->requestTemperatures();
+    }
     float temp = sensors->getTempCByIndex(index);
     Serial.print("Requested Temperature at Index ");
     Serial.print(index);

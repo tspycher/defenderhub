@@ -31,11 +31,11 @@ DONE - current_page = (current_page+1) % total_pages()
 
 defenderhub/lib/menu/pages/obdOil.h/.cpp
 ============================================================================
-- Needs virtual destructor
+DONE - Needs virtual destructor
 - Needs override specifiers on the 2 methods
 
 defenderhub/lib/menu/pages/environmentTemperature.h/.cpp
 ============================================================================
-- Needs virtual destructor
+DONE - Needs virtual destructor
 - Needs override specifiers on the 2 methods
 - Use std::unique_ptr

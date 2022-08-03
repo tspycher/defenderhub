@@ -13,11 +13,12 @@
 #include "sensorEnvironmentTemperature.h"
 
 class EnvironmentTemperature : public Page {
-    ~EnvironmentTemperature();
 public:
+    ~EnvironmentTemperature();
+
     EnvironmentTemperature(int onewirebus=ONE_WIRE_BUS);
-    String lcd_first_line();
-    String lcd_second_line();
+    String lcd_first_line() override;
+    String lcd_second_line() override;
 private:
     SensorEnvironmentTemperature *sensor;
 };

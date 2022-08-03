@@ -9,10 +9,11 @@
 #include "page.h"
 
 class ObdOil : public Page {
-    ~ObdOil();
 public:
-    String lcd_first_line();
-    String lcd_second_line();
+    ~ObdOil();
+
+    String lcd_first_line() override;
+    String lcd_second_line() override;
 };
 
 #endif //DEFENDERHUB_OBDOILTEMPERATURE_H

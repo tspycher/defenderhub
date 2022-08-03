@@ -2,12 +2,10 @@
 #include "defendermenu.h"
 #include <MemoryUsage.h>
 
-#ifndef LED_BUILTIN
 #define LED_BUILTIN 13
+#define PSEUDO_THREADS 2
 
-#endif
-
-const int UPDATE_TIMER = 5;
+const int UPDATE_TIMER = 10;
 int alive_led_state;
 int previous_free_ram = 0;
 
@@ -31,11 +29,12 @@ void setup() {
     Serial.begin(9600);
     Serial.println("**** Defender Hub started ****");
     defender_menu->welcome_screen();
+    Serial.println("**** Start Loop ****");
+    defender_menu->update_lcd();
 }
 
 
-void memory_state()
-{
+void memory_state() {
     int free_ram = mu_freeRam();
     if (free_ram > previous_free_ram and previous_free_ram > 0) {
         Serial.println("!!!!!!! Potential Memory leak, increased free ram since last loop");
@@ -55,12 +54,41 @@ void toggle_alive_led() {
     }
 }
 
-void loop() {
-    memory_state();
-    toggle_alive_led();
-    defender_menu->update_lcd();
-    defender_menu->switch_page();
-    delay(UPDATE_TIMER*1000);
+void loop_thread0(unsigned long ms) {
+    if ((int) (ms/10) % (int) (UPDATE_TIMER*100) == 0) {
+        memory_state();
+        toggle_alive_led();
+        defender_menu->switch_page();
+        defender_menu->update_lcd();
+    }
 }
+
+void loop_thread1(unsigned long ms) {
+    if ((int) (ms/10) % (int) (2*10) == 0) {
+        if (defender_menu->type_of_current_page() == 1) {
+            // we have a gauge to update
+            defender_menu->update_lcd_gauge();
+        }
+    }
+}
+
+void loop() {
+    unsigned long ms = millis();
+    int thread = ms % PSEUDO_THREADS;
+
+    switch (thread) {
+        case 0:
+            loop_thread0(ms);
+            break;
+        case 1:
+            loop_thread1(ms);
+            break;
+        default:
+            Serial.println("No thread registered for id: "+thread);
+            break;
+    }
+    delay(5);
+}
+
 
 

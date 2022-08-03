@@ -8,7 +8,7 @@
 #include "page.h"
 #include <LiquidCrystal.h>
 
-#define PAGES 2
+#define PAGES 6
 
 struct DisplayConfig {
     int rs;
@@ -26,7 +26,10 @@ public:
     DefenderMenu(struct DisplayConfig displayconfig);//int lcd_rs=11, int lcd_enable=12, int lcd_d0=8, int lcd_d1=7, int lcd_d2=6, int lcd_d3=5);
     void welcome_screen(int delay_seconds=2);
     void update_lcd(void);
+    void update_lcd_gauge(void);
+
     void switch_page();
+    int type_of_current_page();
 private:
     int current_page = 0;
     DisplayConfig displayconfig;

@@ -5,13 +5,21 @@
 #include "defendermenu.h"
 #include "pages/environmentTemperature.h"
 #include "pages/obdOil.h"
+#include "pages/gpsPosition.h"
+#include "pages/consumption.h"
+#include "pages/boost.h"
+#include "pages/trip.h"
 #include <LiquidCrystal.h>
 #include <Arduino.h>
 
 
 DefenderMenu::DefenderMenu(struct DisplayConfig displayconfig) : displayconfig(displayconfig){
-    pages[0] = new EnvironmentTemperature();
-    pages[1] = new ObdOil();
+    pages[0] = new Boost();
+    pages[1] = new EnvironmentTemperature();
+    pages[2] = new ObdOil();
+    pages[3] = new GpsPosition();
+    pages[4] = new Consumption();
+    pages[5] = new Trip();
 
     lcd = new LiquidCrystal(displayconfig.rs, displayconfig.enable, displayconfig.d0, displayconfig.d1, displayconfig.d2, displayconfig.d3);
     lcd->begin(displayconfig.cols, displayconfig.rows);
@@ -37,10 +45,21 @@ void DefenderMenu::welcome_screen(int delay_seconds) {
     lcd->clear();
 }
 
+int DefenderMenu::type_of_current_page() {
+    return pages[current_page]->get_page_type();
+}
+
+void DefenderMenu::update_lcd_gauge() {
+    lcd->setCursor(0, 1);
+    lcd->print("                ");
+    lcd->setCursor(0, 1);
+    lcd->print(pages[current_page]->lcd_second_line().c_str());
+}
+
 void DefenderMenu::update_lcd(void) {
     Serial.println("Updating LCD");
-
     lcd->clear();
+
     lcd->setCursor(0, 0);
     lcd->print(pages[current_page]->lcd_first_line().c_str());
     lcd->setCursor(0, 1);
