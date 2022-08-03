@@ -1,0 +1,41 @@
+defenderhub/lib/environmentTemperature/sensorEnvironmentTemperature.h/.cpp
+============================================================================
+
+DONE - Why is there a protected section, nobody is inheriting this
+DONE - Don't place accessible fields in protection section, design for close, not open
+DONE - For more extendability, add the inside and outside indexes/ports to the constructor
+???? - Make fields final
+- Use std::unique_ptr to store the pointer references (auto-cleanup memory)
+- Use logging library/defines so you can disable logs/serial when you make a release build
+
+defenderhub/lib/menu/page.h/.cpp
+============================================================================
+DONE - Needs a virtual destructor (virtual ~Page() = default;)
+DONE - No need for the page.cpp file
+???? - Don't include headers you don't need
+
+defenderhub/lib/menu/defendermenu.h/.cpp
+============================================================================
+DONE - Better naming for constructor variables
+- Use a std::vector for managing the pages list (std::vector<std::unique_ptr<Page>>)
+- Use a std::unique_ptr to hold the lcd pointer
+DONE - Hardcoded values in lcd->begin
+DONE - Don't use sizeof for string length
+  for (size_t i = 0, end = strlen(a); i < end; ++i) {
+  	...
+  }
+DONE - Use ++i instead of i++ for performance reasons (nit)
+DONE - Make a method that prints character by character instead of duplicating code
+- Don't use sizeof for the total pages method, use pages.size() (after you changed it to vector)
+DONE - current_page = (current_page+1) % total_pages()
+
+defenderhub/lib/menu/pages/obdOil.h/.cpp
+============================================================================
+- Needs virtual destructor
+- Needs override specifiers on the 2 methods
+
+defenderhub/lib/menu/pages/environmentTemperature.h/.cpp
+============================================================================
+- Needs virtual destructor
+- Needs override specifiers on the 2 methods
+- Use std::unique_ptr

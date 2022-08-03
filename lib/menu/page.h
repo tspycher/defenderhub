@@ -9,6 +9,8 @@
 
 class Page {
 public:
+    virtual ~Page() = default;
+
     virtual String lcd_first_line() = 0;
     virtual String lcd_second_line() = 0;
 };

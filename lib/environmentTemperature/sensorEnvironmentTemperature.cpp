@@ -9,7 +9,7 @@
 
 
 
-SensorEnvironmentTemperature::SensorEnvironmentTemperature(int onewirebus){
+SensorEnvironmentTemperature::SensorEnvironmentTemperature(int onewirebus, uint8_t index_outside, uint8_t index_inside) : index_outside(index_outside), index_inside(index_inside){
     oneWire = new OneWire(onewirebus);
     sensors = new DallasTemperature(oneWire);
     sensors->begin();
@@ -27,9 +27,9 @@ float SensorEnvironmentTemperature::get_temperature_for_index(uint8_t index) {
 }
 
 float SensorEnvironmentTemperature::get_temperature_outside() {
-    return get_temperature_for_index(INDEX_OUTSIDE);
+    return get_temperature_for_index(index_outside);
 }
 
 float SensorEnvironmentTemperature::get_temperature_inside() {
-    return get_temperature_for_index(INDEX_INSIDE);
+    return get_temperature_for_index(index_inside);
 }

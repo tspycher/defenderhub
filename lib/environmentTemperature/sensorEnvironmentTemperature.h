@@ -9,13 +9,18 @@
 
 
 class SensorEnvironmentTemperature {
-    const uint8_t INDEX_OUTSIDE = 0;
-    const uint8_t INDEX_INSIDE = 1;
+
 public:
-    SensorEnvironmentTemperature(int onewirebus);
+    SensorEnvironmentTemperature(int onewirebus, uint8_t index_outside=0, uint8_t index_inside=1);
     float get_temperature_outside();
     float get_temperature_inside();
-protected:
+private:
+    const uint8_t index_outside;
+    const uint8_t index_inside;
+
+    //const uint8_t INDEX_OUTSIDE = 0;
+    //const uint8_t INDEX_INSIDE = 1;
+
     DallasTemperature *sensors;
     OneWire *oneWire;
     float get_temperature_for_index(uint8_t index);

@@ -4,6 +4,9 @@
 
 #include "obdOil.h"
 
+ObdOil::~ObdOil() {
+}
+
 String ObdOil::lcd_first_line() {
     return "Oil Temp.: ? C";
 }

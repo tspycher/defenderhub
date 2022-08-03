@@ -9,29 +9,29 @@
 #include <Arduino.h>
 
 
-DefenderMenu::DefenderMenu(int rs, int enable, int d0, int d1, int d2, int d3) {
+DefenderMenu::DefenderMenu(struct DisplayConfig displayconfig) : displayconfig(displayconfig){
     pages[0] = new EnvironmentTemperature();
     pages[1] = new ObdOil();
 
-    lcd = new LiquidCrystal(rs, enable, d0, d1, d2, d3);
-    lcd->begin(16, 2);
+    lcd = new LiquidCrystal(displayconfig.rs, displayconfig.enable, displayconfig.d0, displayconfig.d1, displayconfig.d2, displayconfig.d3);
+    lcd->begin(displayconfig.cols, displayconfig.rows);
+}
+
+void DefenderMenu::display_animated_text(String text, int row, int step_ms) {
+    int bufsize = displayconfig.cols+1;
+    char char_text[bufsize];
+    text.toCharArray(char_text, bufsize);
+
+    for (int i = 0; i < (int) strlen(char_text); ++i) {
+        lcd->setCursor(i, row);
+        lcd->print(char_text[i]);
+        delay(step_ms);
+    }
 }
 
 void DefenderMenu::welcome_screen(int delay_seconds) {
-    lcd->setCursor(0, 0);
-    char const a[] = "  DEFENDER 110  ";
-    for (int i = 0; i < (int) (sizeof(a)-1); i++) {
-        lcd->setCursor(i, 0);
-        lcd->print(a[i]);
-        delay(100);
-    }
-
-    char const b[] = "one life,live it";
-    for (int i = 0; i < (int) (sizeof(b)-1); i++) {
-        lcd->setCursor(i, 1);
-        lcd->print(b[i]);
-        delay(100);
-    }
+    display_animated_text(String("  DEFENDER 110  "), 0, 100);
+    display_animated_text(String("one life,live it"), 1, 100);
 
     delay(delay_seconds*1000);
     lcd->clear();
@@ -52,9 +52,5 @@ int DefenderMenu::total_pages() {
 }
 
 void DefenderMenu::switch_page() {
-    if (current_page >= (total_pages() - 1)) {
-        current_page = 0;
-    } else {
-        current_page++;
-    }
+    current_page = (current_page+1) % total_pages();
 }
