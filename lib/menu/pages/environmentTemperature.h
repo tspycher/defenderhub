@@ -5,7 +5,6 @@
 #ifndef DEFENDERHUB_ENVIRONMENTTEMPERATURE_H
 #define DEFENDERHUB_ENVIRONMENTTEMPERATURE_H
 
-#define ONE_WIRE_BUS 2
 
 
 #include <Arduino.h>
@@ -16,7 +15,7 @@ class EnvironmentTemperature : public Page {
 public:
     ~EnvironmentTemperature();
 
-    EnvironmentTemperature(int onewirebus=ONE_WIRE_BUS);
+    EnvironmentTemperature(int onewirebus);
     String lcd_first_line() override;
     String lcd_second_line() override;
 private:
