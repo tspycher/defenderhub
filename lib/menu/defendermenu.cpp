@@ -23,12 +23,8 @@ DefenderMenu::DefenderMenu(struct DisplayConfig displayconfig) : displayconfig(d
 
     lcd = new Waveshare_LCD1602_RGB(displayconfig.cols,displayconfig.rows);  //16 characters and 2 lines of show
     lcd->init();
-
-    /*lcd.setCursor(0,0);
-    lcd.send_string("Waveshare");
-    lcd.setCursor(0,1);
-    lcd.send_string("Hello,World!");
-    */
+    lcd->noCursor();
+    lcd->setRGB(displayconfig.red, displayconfig.green, displayconfig.blue);
 }
 
 void DefenderMenu::display_animated_text(String text, int row, int step_ms) {

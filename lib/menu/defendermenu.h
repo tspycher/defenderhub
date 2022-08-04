@@ -11,12 +11,9 @@
 #define PAGES 6
 
 struct DisplayConfig {
-    /*int rs;
-    int enable;
-    int d0;
-    int d1;
-    int d2;
-    int d3;*/
+    uint8_t red=0;
+    uint8_t green=0;
+    uint8_t blue=0;
     int cols = 16;
     int rows = 2;
 };
