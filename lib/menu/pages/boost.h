@@ -13,9 +13,9 @@ public:
     ~Boost();
     String lcd_first_line() override;
     String lcd_second_line() override;
-private:
+    int get_gauge_value() override;
+protected:
     float get_obd_value();
-    int get_gauge_value();
 
 };
 #endif //DEFENDERHUB_BOOST_H

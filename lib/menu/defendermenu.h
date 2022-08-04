@@ -6,17 +6,17 @@
 #define DEFENDERHUB_DEFENDERMENU_H
 
 #include "page.h"
-#include <LiquidCrystal.h>
+#include "Waveshare_LCD1602_RGB.h"
 
 #define PAGES 6
 
 struct DisplayConfig {
-    int rs;
+    /*int rs;
     int enable;
     int d0;
     int d1;
     int d2;
-    int d3;
+    int d3;*/
     int cols = 16;
     int rows = 2;
 };
@@ -34,7 +34,7 @@ private:
     int current_page = 0;
     DisplayConfig displayconfig;
     void display_animated_text(String text, int row, int step_ms = 100);
-    LiquidCrystal *lcd;
+    Waveshare_LCD1602_RGB *lcd;
     Page *pages[PAGES];
     int total_pages();
 

@@ -24,12 +24,5 @@ String Boost::lcd_first_line() {
 }
 
 String Boost::lcd_second_line() {
-    int lcd_gauge_value = (int) (16.0 / 100.0 * (float)get_gauge_value());
-    char filler = 255;
-    String gauge;
-
-    for (int i = 0; i < lcd_gauge_value; i++)
-        gauge += filler;
-
-    return String(gauge);
+    return String();
 }

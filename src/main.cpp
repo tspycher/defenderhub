@@ -2,6 +2,7 @@
 #include "defendermenu.h"
 #include <MemoryUsage.h>
 
+#include <Wire.h>
 #define LED_BUILTIN 13
 #define PSEUDO_THREADS 2
 
@@ -13,13 +14,15 @@ DefenderMenu *defender_menu;
 
 
 void setup() {
+// initialize
+
     struct DisplayConfig displayconfig;
-    displayconfig.rs = 11;
+    /*displayconfig.rs = 11;
     displayconfig.enable = 12;
     displayconfig.d0 = 8;
     displayconfig.d1 = 7;
     displayconfig.d2 = 6;
-    displayconfig.d3 = 5;
+    displayconfig.d3 = 5;*/
 
     defender_menu = new DefenderMenu(displayconfig);
 

@@ -9,7 +9,7 @@
 #include "pages/consumption.h"
 #include "pages/boost.h"
 #include "pages/trip.h"
-#include <LiquidCrystal.h>
+#include "Waveshare_LCD1602_RGB.h"
 #include <Arduino.h>
 
 
@@ -21,8 +21,14 @@ DefenderMenu::DefenderMenu(struct DisplayConfig displayconfig) : displayconfig(d
     pages[4] = new Consumption();
     pages[5] = new Trip();
 
-    lcd = new LiquidCrystal(displayconfig.rs, displayconfig.enable, displayconfig.d0, displayconfig.d1, displayconfig.d2, displayconfig.d3);
-    lcd->begin(displayconfig.cols, displayconfig.rows);
+    lcd = new Waveshare_LCD1602_RGB(displayconfig.cols,displayconfig.rows);  //16 characters and 2 lines of show
+    lcd->init();
+
+    /*lcd.setCursor(0,0);
+    lcd.send_string("Waveshare");
+    lcd.setCursor(0,1);
+    lcd.send_string("Hello,World!");
+    */
 }
 
 void DefenderMenu::display_animated_text(String text, int row, int step_ms) {
@@ -32,7 +38,7 @@ void DefenderMenu::display_animated_text(String text, int row, int step_ms) {
 
     for (int i = 0; i < (int) strlen(char_text); ++i) {
         lcd->setCursor(i, row);
-        lcd->print(char_text[i]);
+        lcd->write_char(char_text[i]);
         delay(step_ms);
     }
 }
@@ -51,10 +57,20 @@ int DefenderMenu::type_of_current_page() {
 
 void DefenderMenu::update_lcd_gauge() {
     lcd->setCursor(0, 1);
-    for (int i = 0; i < displayconfig.cols; i++)
-        lcd->print((char)219); //(char)32);
-    lcd->setCursor(0, 1);
-    lcd->print(pages[current_page]->lcd_second_line().c_str());
+    int lcd_gauge_value = (int) (displayconfig.cols/ 100.0 * (float)pages[current_page]->get_gauge_value());
+
+    char filler = 255;
+    char empty = 219;
+
+    String gauge;
+
+    for (int i = 0; i < displayconfig.cols; i++) {
+        if(i<= lcd_gauge_value) {
+            lcd->write_char(filler); //(char)32);
+        } else {
+            lcd->write_char(empty); //(char)32);
+        }
+    }
 }
 
 void DefenderMenu::update_lcd(void) {
@@ -62,9 +78,10 @@ void DefenderMenu::update_lcd(void) {
     lcd->clear();
 
     lcd->setCursor(0, 0);
-    lcd->print(pages[current_page]->lcd_first_line().c_str());
+    lcd->send_string(pages[current_page]->lcd_first_line().c_str());
     lcd->setCursor(0, 1);
-    lcd->print(pages[current_page]->lcd_second_line().c_str());
+    lcd->send_string(pages[current_page]->lcd_second_line().c_str());
+
 }
 
 int DefenderMenu::total_pages() {

@@ -18,6 +18,8 @@ public:
     virtual String lcd_first_line() = 0;
     virtual String lcd_second_line() = 0;
     int get_page_type();
+    virtual int get_gauge_value() { return 0; };
+
 protected:
     int page_type = 0;
 };
