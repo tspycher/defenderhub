@@ -12,7 +12,7 @@ Boost::~Boost() {
 }
 
 int Boost::get_gauge_value() {
-    return random(0, 100); //(int) 100 / 1000 * get_obd_value();
+    return (int) (100.0 / 1000.0 * get_obd_value());
 }
 
 float Boost::get_obd_value() {
@@ -25,7 +25,7 @@ String Boost::lcd_first_line() {
 
 String Boost::lcd_second_line() {
     int lcd_gauge_value = (int) (16.0 / 100.0 * (float)get_gauge_value());
-    String filler = "*";
+    char filler = 255;
     String gauge;
 
     for (int i = 0; i < lcd_gauge_value; i++)

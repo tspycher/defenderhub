@@ -5,10 +5,10 @@
 #define LED_BUILTIN 13
 #define PSEUDO_THREADS 2
 
-const int UPDATE_TIMER = 10;
+const int UPDATE_TIMER = 3;
 int alive_led_state;
 int previous_free_ram = 0;
-
+unsigned long looper = 0;
 DefenderMenu *defender_menu;
 
 
@@ -54,8 +54,8 @@ void toggle_alive_led() {
     }
 }
 
-void loop_thread0(unsigned long ms) {
-    if ((int) (ms/10) % (int) (UPDATE_TIMER*100) == 0) {
+void loop_thread0() {
+    if ((int) (millis()/10) % (int) (UPDATE_TIMER*100) == 0) {
         memory_state();
         toggle_alive_led();
         defender_menu->switch_page();
@@ -63,31 +63,29 @@ void loop_thread0(unsigned long ms) {
     }
 }
 
-void loop_thread1(unsigned long ms) {
-    if ((int) (ms/10) % (int) (2*10) == 0) {
+void loop_thread1() {
+    if ((int) (millis()/10) % (int) (2*10) == 0) {
         if (defender_menu->type_of_current_page() == 1) {
-            // we have a gauge to update
             defender_menu->update_lcd_gauge();
         }
     }
 }
 
 void loop() {
-    unsigned long ms = millis();
-    int thread = ms % PSEUDO_THREADS;
+    int thread = looper % PSEUDO_THREADS;
 
     switch (thread) {
         case 0:
-            loop_thread0(ms);
+            loop_thread0();
             break;
         case 1:
-            loop_thread1(ms);
+            loop_thread1();
             break;
         default:
             Serial.println("No thread registered for id: "+thread);
             break;
     }
-    delay(5);
+    ++looper;
 }
 
 

@@ -51,7 +51,8 @@ int DefenderMenu::type_of_current_page() {
 
 void DefenderMenu::update_lcd_gauge() {
     lcd->setCursor(0, 1);
-    lcd->print("                ");
+    for (int i = 0; i < displayconfig.cols; i++)
+        lcd->print((char)219); //(char)32);
     lcd->setCursor(0, 1);
     lcd->print(pages[current_page]->lcd_second_line().c_str());
 }
