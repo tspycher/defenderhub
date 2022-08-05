@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "defendermenu.h"
+#include "Equipment.h"
 #include <MemoryUsage.h>
 
 #include <Wire.h>
@@ -19,13 +20,18 @@ int button_long_press_timer = 0;
 bool button_action_to_performe = false;
 
 DefenderMenu *defender_menu;
-
+Equipment *equipment;
 
 void setup() {
+    struct Relay relay1 = {4, (char*)"Radio"};
+
     struct UnitConfig config;
     config.lcd_green = 100;
 
     defender_menu = new DefenderMenu(config);
+
+    Relay relays[] = {relay1};
+    equipment = new Equipment(relays);
 
     pinMode(LED_BUILTIN, OUTPUT);
     digitalWrite(LED_BUILTIN, LOW);
@@ -63,6 +69,10 @@ void loop_thread0() {
         memory_state();
         toggle_alive_led();
         defender_menu->update_lcd();
+
+        //equipment->turn_off(0);
+        //delay(500);
+        //equipment->turn_on(0);
     }
 }
 
@@ -112,6 +122,3 @@ void loop() {
     }
     ++looper;
 }
-
-
-
