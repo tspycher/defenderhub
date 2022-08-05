@@ -25,6 +25,7 @@ public:
     void welcome_screen(int delay_seconds=2);
     void update_lcd(void);
     void update_lcd_gauge(void);
+    void show_message(char *message, int delay_ms=2000);
 
     void switch_page();
     void special_option(); // long pressed button

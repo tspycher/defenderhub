@@ -24,14 +24,12 @@ Equipment *equipment;
 
 void setup() {
     struct Relay relay1 = {4, (char*)"Radio"};
+    Relay relays[] = {relay1};
 
     struct UnitConfig config;
     config.lcd_green = 100;
 
     defender_menu = new DefenderMenu(config);
-
-    Relay relays[] = {relay1};
-    equipment = new Equipment(relays);
 
     pinMode(LED_BUILTIN, OUTPUT);
     digitalWrite(LED_BUILTIN, LOW);
@@ -41,6 +39,8 @@ void setup() {
     defender_menu->welcome_screen(1);
     Serial.println("**** Start Loop ****");
     defender_menu->update_lcd();
+
+    equipment = new Equipment(relays);
 }
 
 
@@ -64,15 +64,29 @@ void toggle_alive_led() {
     }
 }
 
+void switch_equipment(bool on, int index) {
+    char message[16];
+
+    if (on) {
+        (String(equipment->get_name(index)) + String(" ON")).toCharArray(message, 16);
+        equipment->turn_on(index);
+        defender_menu->show_message(message);
+    } else {
+        (String(equipment->get_name(index)) + String(" OFF")).toCharArray(message, 16);
+        equipment->turn_off(index);
+        defender_menu->show_message(message);
+    }
+}
+
 void loop_thread0() {
     if ((int) (millis()/10) % (int) (UPDATE_TIMER*100) == 0) {
         memory_state();
         toggle_alive_led();
         defender_menu->update_lcd();
 
-        //equipment->turn_off(0);
-        //delay(500);
-        //equipment->turn_on(0);
+        switch_equipment(true, 0);
+        switch_equipment(false, 0);
+
     }
 }
 

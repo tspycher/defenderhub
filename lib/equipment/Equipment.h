@@ -17,9 +17,11 @@ class Equipment {
 public:
     Equipment(Relay *relays);
 
+    void turn_off(int index, void (*func)(char*, int));
+    void turn_on(int index, void (*func)(char*, int));
     void turn_off(int index);
     void turn_on(int index);
-
+    char *get_name(int index);
     int num_relays();
 private:
     Relay *relays;

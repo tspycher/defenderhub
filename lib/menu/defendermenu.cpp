@@ -27,6 +27,18 @@ DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig
     lcd->setRGB(unitconfig.lcd_red, unitconfig.lcd_green, unitconfig.lcd_blue);
 }
 
+void DefenderMenu::show_message(char *message, int delay_ms) {
+    lcd->clear();
+    lcd->blink();
+    lcd->noCursor();
+    lcd->setCursor(0, 0);
+    display_animated_text(String("*** MESSAGE ****"), 0, 50);
+    lcd->setCursor(0, 1);
+    lcd->send_string(message);
+    delay(delay_ms);
+    update_lcd();
+}
+
 void DefenderMenu::display_animated_text(String text, int row, int step_ms) {
     int bufsize = unitconfig.lcd_cols+1;
     char char_text[bufsize];

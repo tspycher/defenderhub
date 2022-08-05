@@ -8,7 +8,7 @@ ObdOil::~ObdOil() {
 }
 
 String ObdOil::lcd_first_line() {
-    return "Oil Temp.: ? C";
+    return "Oil Temp.: ?" + (char)223;
 }
 
 String ObdOil::lcd_second_line() {
