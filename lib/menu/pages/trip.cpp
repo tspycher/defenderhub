@@ -8,9 +8,9 @@ Trip::~Trip() {
 }
 
 String Trip::lcd_first_line() {
-    return "Distance: 99km";
+    return "Distance:   99km";
 }
 
 String Trip::lcd_second_line() {
-    return "Time: 12m";
+    return "Time:        12m";
 }

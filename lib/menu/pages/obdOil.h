@@ -11,9 +11,11 @@
 class ObdOil : public Page {
 public:
     ~ObdOil();
-
     String lcd_first_line() override;
     String lcd_second_line() override;
+private:
+    int obd_oil_temperature();
+    int obd_oil_pressure();
 };
 
 #endif //DEFENDERHUB_OBDOILTEMPERATURE_H

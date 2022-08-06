@@ -111,7 +111,7 @@ void DefenderMenu::special_option() {
 void DefenderMenu::extra_special_option() {
     lcd->clear();
     lcd->setCursor(0, 0);
-    lcd->send_string("Made by Tom Spycher");
+    lcd->send_string("Tom Spycher");
     lcd->setCursor(0, 1);
     lcd->send_string("August 2022");
 }

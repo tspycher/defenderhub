@@ -7,10 +7,18 @@
 ObdOil::~ObdOil() {
 }
 
+int ObdOil::obd_oil_pressure() {
+    return 45;
+}
+
+int ObdOil::obd_oil_temperature() {
+    return 100;
+}
+
 String ObdOil::lcd_first_line() {
-    return "Oil Temp.: ?" + (char)223;
+    return (String("Oil T: ") + obd_oil_temperature() + (char)223);
 }
 
 String ObdOil::lcd_second_line() {
-    return "Oil Pres.: ? psi";
+    return (String("Oil P: ") + obd_oil_pressure() + String(" psi"));
 }

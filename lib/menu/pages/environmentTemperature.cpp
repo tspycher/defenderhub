@@ -16,10 +16,10 @@ EnvironmentTemperature::~EnvironmentTemperature() {
 
 String EnvironmentTemperature::lcd_first_line() {
     float temperature = sensor->get_temperature_outside();
-    return "Outside: " + (String)temperature + (char)223;
+    return "Outside:  " + (String)temperature + (char)223;
 }
 
 String EnvironmentTemperature::lcd_second_line() {
     float temperature = sensor->get_temperature_inside();
-    return "Inside:  " + (String)temperature + (char)223;
+    return "Inside:   " + (String)temperature + (char)223;
 }

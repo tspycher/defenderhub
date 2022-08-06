@@ -83,10 +83,6 @@ void loop_thread0() {
         memory_state();
         toggle_alive_led();
         defender_menu->update_lcd();
-
-        switch_equipment(true, 0);
-        switch_equipment(false, 0);
-
     }
 }
 
@@ -111,6 +107,9 @@ void loop() {
         if (button_press_duration >= EXTRA_LONG_PRESS_DURATION_SECONDS*1000) {
             Serial.write("Button has been pressed very long");
             defender_menu->extra_special_option();
+
+            switch_equipment(true, 0);
+            switch_equipment(false, 0);
         } else if (button_press_duration >= LONG_PRESS_DURATION_SECONDS*1000) {
             Serial.write("Button has been pressed long");
             defender_menu->special_option();

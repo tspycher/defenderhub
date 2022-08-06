@@ -13,6 +13,6 @@ String GpsPosition::lcd_first_line() {
 }
 
 String GpsPosition::lcd_second_line() {
-    return "7.872920 E";
+    return " 7.872920 E";
 }
 
