@@ -4,7 +4,7 @@
 
 #include "ObdEngineRpm.h"
 
-ObdEngineRpm::ObdEngineRpm(Parameter &obd_parameter) : Page(&obd_parameter) {
+ObdEngineRpm::ObdEngineRpm(Parameter &obd_parameter) : Page(&obd_parameter){
     page_type = PAGE_TYPE_GAUGE;
 }
 

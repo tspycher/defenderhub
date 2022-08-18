@@ -9,6 +9,7 @@
 Equipment::Equipment(Relay *relays) :relays(relays) {
     for (int r; r < num_relays(); ++r) {
         pinMode(relays[r].pin, OUTPUT);
+        turn_off(r);
     }
 }
 
@@ -27,7 +28,7 @@ void Equipment::turn_off(int index, void (*func)(char *, int)) {
 void Equipment::turn_off(int index) {
     Serial.print("Turning off: ");
     Serial.println(get_name(index));
-    digitalWrite(relays[index].pin, LOW);
+    digitalWrite(relays[index].pin, HIGH);
 }
 void Equipment::turn_on(int index, void (*func)(char *, int)) {
     turn_on(index);
@@ -36,5 +37,5 @@ void Equipment::turn_on(int index, void (*func)(char *, int)) {
 void Equipment::turn_on(int index) {
     Serial.print("Turning on: ");
     Serial.println(get_name(index));
-    digitalWrite(relays[index].pin, HIGH);
+    digitalWrite(relays[index].pin, LOW);
 }

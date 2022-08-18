@@ -8,7 +8,6 @@
 #include "parameters/AbsoluteBarometricPressure.h"
 
 DefenderObd2::DefenderObd2() {
-    //can = new MockSerial_CAN();
     can.begin(can_tx, can_rx, can_baud);
 
     parameters[0] = new EngineSpeed(can);

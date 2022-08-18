@@ -25,11 +25,14 @@ DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig
     pages[4] = new Consumption();
     pages[5] = new Trip();
 
-
     lcd = new Waveshare_LCD1602_RGB(unitconfig.lcd_cols,unitconfig.lcd_rows);  //16 characters and 2 lines of show
     lcd->init();
     lcd->noCursor();
     lcd->setRGB(unitconfig.lcd_red, unitconfig.lcd_green, unitconfig.lcd_blue);
+}
+
+void DefenderMenu::update_current_page_data() {
+    pages[current_page]->update_values();
 }
 
 Page *DefenderMenu::get_current_page() {
@@ -74,7 +77,7 @@ int DefenderMenu::type_of_current_page() {
 
 void DefenderMenu::update_lcd_gauge() {
     lcd->setCursor(0, 1);
-    int lcd_gauge_value = (int) (unitconfig.lcd_cols/ 100.0 * (float)get_current_page()->get_gauge_value());
+    int lcd_gauge_value = (int) (unitconfig.lcd_cols/ 100.0 * (float)pages[current_page]->get_gauge_value());
 
     char filler = 255;
     char empty = 219;
@@ -93,9 +96,9 @@ void DefenderMenu::update_lcd_gauge() {
 void DefenderMenu::update_lcd(void) {
     lcd->clear();
     lcd->setCursor(0, 0);
-    lcd->send_string(get_current_page()->lcd_first_line().c_str());
+    lcd->send_string(pages[current_page]->lcd_first_line().c_str());
     lcd->setCursor(0, 1);
-    lcd->send_string(get_current_page()->lcd_second_line().c_str());
+    lcd->send_string(pages[current_page]->lcd_second_line().c_str());
 }
 
 int DefenderMenu::total_pages() {

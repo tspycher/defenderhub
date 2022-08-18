@@ -28,6 +28,7 @@ public:
     void update_lcd_gauge(void);
     void show_message(char *message, int delay_ms=2000);
 
+    void update_current_page_data();
     void switch_page();
     void special_option(); // long pressed button
     void extra_special_option(); // very long pressed button

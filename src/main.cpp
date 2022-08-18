@@ -8,11 +8,14 @@
 #define PSEUDO_THREADS 2
 #define BUTTON 2
 #define SERIAL_BAUD 115200 // 9600
-const int UPDATE_TIMER = 10;
+const unsigned long UPDATE_TIMER = 10 * 1000;
+const unsigned long UPDATE2_TIMER = 0.1 * 1000;
+
 const int LONG_PRESS_DURATION_SECONDS = 2;
 const int EXTRA_LONG_PRESS_DURATION_SECONDS = 4;
 
 int switch_state = 0;
+bool inverted_switch_state = true;
 int alive_led_state;
 int previous_free_ram = 0;
 unsigned long looper = 0;
@@ -23,26 +26,29 @@ DefenderMenu *defender_menu;
 Equipment *equipment;
 
 void setup() {
+    // CONFIGURING RELAYS
     struct Relay relay1 = {4, (char*)"Radio"};
     Relay relays[] = {relay1};
+    equipment = new Equipment(relays);
 
+    // CONFIGURE THE DISPLAY
     struct UnitConfig config;
     config.lcd_green = 100;
 
-    defender_menu = new DefenderMenu(config);
-
+    // CONFIGURE PINS
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(BUTTON, INPUT_PULLUP);
-
     digitalWrite(LED_BUILTIN, LOW);
     alive_led_state = LOW;
-    Serial.begin(SERIAL_BAUD);
-    Serial.println("**** Defender Hub started ****");
-    defender_menu->welcome_screen(1);
-    Serial.println("**** Start Loop ****");
-    defender_menu->update_lcd();
 
-    equipment = new Equipment(relays);
+    // START SERIAL
+    Serial.begin(SERIAL_BAUD);
+
+    // INITIALIZING APPLICATION
+    Serial.println("**** Defender Hub started ****");
+    defender_menu = new DefenderMenu(config);
+    defender_menu->welcome_screen(1);
+    defender_menu->update_lcd();
 }
 
 
@@ -66,6 +72,7 @@ void toggle_alive_led() {
     }
 }
 
+// Helper Function to switch equipment and display message
 void switch_equipment(bool on, int index) {
     char message[16];
 
@@ -80,18 +87,21 @@ void switch_equipment(bool on, int index) {
     }
 }
 
+// Pseudo Thread 0 Loop, Slow Update
 void loop_thread0() { // Slow Thread
-    if ((int) (millis()/10) % (int) (UPDATE_TIMER*100) == 0) {
+    if (millis() % UPDATE_TIMER == 0) {
         memory_state();
         toggle_alive_led();
         defender_menu->update_lcd();
     }
 }
 
+// Pseudo Thread 1 Loop, Fast Update
 void loop_thread1() { // Fast Thread
-    if ((int) (millis()/10) % (int) (3*10) == 0) {
-        defender_menu->get_current_page()->update_values();
-
+    if (millis() % UPDATE2_TIMER == 0) {
+        //Page *p = defender_menu->get_current_page();
+        //p->update_values();
+        defender_menu->update_current_page_data();
         if (defender_menu->type_of_current_page() == PAGE_TYPE_GAUGE) {
             defender_menu->update_lcd_gauge();
         }
@@ -102,7 +112,12 @@ void loop() {
     int thread = looper % PSEUDO_THREADS;
 
     // Handling the Switch
-    switch_state = digitalRead(BUTTON);
+    if (inverted_switch_state) {
+        switch_state = !digitalRead(BUTTON);
+    } else {
+        switch_state = digitalRead(BUTTON);
+    }
+
     if (switch_state == HIGH and !button_action_to_performe) {
         button_long_press_timer = millis();
         button_action_to_performe = true;
@@ -111,14 +126,12 @@ void loop() {
         if (button_press_duration >= EXTRA_LONG_PRESS_DURATION_SECONDS*1000) {
             Serial.write("Button has been pressed very long");
             defender_menu->extra_special_option();
-
             //switch_equipment(true, 0);
             //switch_equipment(false, 0);
         } else if (button_press_duration >= LONG_PRESS_DURATION_SECONDS*1000) {
             Serial.write("Button has been pressed long");
             defender_menu->special_option();
         } else {
-            Serial.write("Button has been pressed short");
             defender_menu->switch_page();
             defender_menu->update_lcd();
         }
