@@ -9,9 +9,7 @@
 #include "pages/consumption.h"
 #include "pages/boost.h"
 #include "pages/trip.h"
-#include "Waveshare_LCD1602_RGB.h"
 #include <Arduino.h>
-
 
 DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig), is_defender_green(true){
     pages[0] = new Boost();
@@ -20,6 +18,8 @@ DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig
     pages[3] = new GpsPosition();
     pages[4] = new Consumption();
     pages[5] = new Trip();
+
+    obd = new DefenderObd2();
 
     lcd = new Waveshare_LCD1602_RGB(unitconfig.lcd_cols,unitconfig.lcd_rows);  //16 characters and 2 lines of show
     lcd->init();

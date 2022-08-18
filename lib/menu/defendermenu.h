@@ -6,7 +6,8 @@
 #define DEFENDERHUB_DEFENDERMENU_H
 
 #include "page.h"
-#include "Waveshare_LCD1602_RGB.h"
+#include <Waveshare_LCD1602_RGB.h>
+#include <DefenderObd2.h>
 
 #define PAGES 6
 
@@ -40,6 +41,7 @@ private:
     Page *pages[PAGES];
     int total_pages();
     bool is_defender_green;
+    DefenderObd2 *obd;
 
 };
 

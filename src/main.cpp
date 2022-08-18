@@ -32,6 +32,8 @@ void setup() {
     defender_menu = new DefenderMenu(config);
 
     pinMode(LED_BUILTIN, OUTPUT);
+    pinMode(BUTTON, INPUT_PULLUP);
+
     digitalWrite(LED_BUILTIN, LOW);
     alive_led_state = LOW;
     Serial.begin(9600);
@@ -108,8 +110,8 @@ void loop() {
             Serial.write("Button has been pressed very long");
             defender_menu->extra_special_option();
 
-            switch_equipment(true, 0);
-            switch_equipment(false, 0);
+            //switch_equipment(true, 0);
+            //switch_equipment(false, 0);
         } else if (button_press_duration >= LONG_PRESS_DURATION_SECONDS*1000) {
             Serial.write("Button has been pressed long");
             defender_menu->special_option();
