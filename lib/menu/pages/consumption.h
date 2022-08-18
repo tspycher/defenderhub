@@ -6,7 +6,7 @@
 #define DEFENDERHUB_CONSUMPTION_H
 
 #include <Arduino.h>
-#include "page.h"
+#include <Page.h>
 
 class Consumption : public Page {
 public:

@@ -11,7 +11,7 @@
 
 #define can_tx  12       // tx of serial can module, the yellow cable
 #define can_rx  13
-#define can_baud 9600 // 9600
+#define can_baud 115200 // 9600
 
 
 class DefenderObd2 {

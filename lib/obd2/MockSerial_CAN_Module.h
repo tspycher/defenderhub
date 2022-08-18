@@ -7,6 +7,7 @@
 
 // ID3 ID2 ID1 ID0 EXT RTR DTA0 DTA1 DTA2 DTA3 DTA4 DTA5 DTA6 DTA7
 #include <Arduino.h>
+#include <Serial_CAN_Module.h>
 #define uchar unsigned char
 
 

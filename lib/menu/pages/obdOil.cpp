@@ -4,6 +4,8 @@
 
 #include "obdOil.h"
 
+ObdOil::ObdOil(Parameter &obd_parameter) : Page(&obd_parameter) {}
+
 ObdOil::~ObdOil() {
 }
 
@@ -12,7 +14,7 @@ int ObdOil::obd_oil_pressure() {
 }
 
 int ObdOil::obd_oil_temperature() {
-    return 100;
+    return obd_parameter->get_current_value();
 }
 
 String ObdOil::lcd_first_line() {

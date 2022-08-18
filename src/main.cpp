@@ -7,7 +7,7 @@
 #define LED_BUILTIN 13
 #define PSEUDO_THREADS 2
 #define BUTTON 2
-
+#define SERIAL_BAUD 115200 // 9600
 const int UPDATE_TIMER = 10;
 const int LONG_PRESS_DURATION_SECONDS = 2;
 const int EXTRA_LONG_PRESS_DURATION_SECONDS = 4;
@@ -36,7 +36,7 @@ void setup() {
 
     digitalWrite(LED_BUILTIN, LOW);
     alive_led_state = LOW;
-    Serial.begin(9600);
+    Serial.begin(SERIAL_BAUD);
     Serial.println("**** Defender Hub started ****");
     defender_menu->welcome_screen(1);
     Serial.println("**** Start Loop ****");
@@ -80,7 +80,7 @@ void switch_equipment(bool on, int index) {
     }
 }
 
-void loop_thread0() {
+void loop_thread0() { // Slow Thread
     if ((int) (millis()/10) % (int) (UPDATE_TIMER*100) == 0) {
         memory_state();
         toggle_alive_led();
@@ -88,9 +88,11 @@ void loop_thread0() {
     }
 }
 
-void loop_thread1() {
+void loop_thread1() { // Fast Thread
     if ((int) (millis()/10) % (int) (3*10) == 0) {
-        if (defender_menu->type_of_current_page() == 1) {
+        defender_menu->get_current_page()->update_values();
+
+        if (defender_menu->type_of_current_page() == PAGE_TYPE_GAUGE) {
             defender_menu->update_lcd_gauge();
         }
     }

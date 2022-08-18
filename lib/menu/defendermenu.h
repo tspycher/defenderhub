@@ -31,7 +31,7 @@ public:
     void switch_page();
     void special_option(); // long pressed button
     void extra_special_option(); // very long pressed button
-
+    Page *get_current_page();
     int type_of_current_page();
 private:
     int current_page = 0;

@@ -6,7 +6,7 @@
 #define DEFENDERHUB_GPSPOSITION_H
 
 #include <Arduino.h>
-#include "page.h"
+#include <Page.h>
 
 class GpsPosition : public Page {
 public:

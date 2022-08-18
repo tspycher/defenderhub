@@ -5,8 +5,7 @@
 #ifndef DEFENDERHUB_TRIP_H
 #define DEFENDERHUB_TRIP_H
 
-#include <Arduino.h>
-#include "page.h"
+#include <Page.h>
 
 class Trip : public Page {
 public:

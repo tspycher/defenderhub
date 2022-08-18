@@ -7,24 +7,33 @@
 #include "pages/obdOil.h"
 #include "pages/gpsPosition.h"
 #include "pages/consumption.h"
-#include "pages/boost.h"
+#include "pages/ObdEngineRpm.h"
 #include "pages/trip.h"
+#include <parameters/OilTemperature.h>
 #include <Arduino.h>
 
 DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig), is_defender_green(true){
-    pages[0] = new Boost();
-    pages[1] = new EnvironmentTemperature(unitconfig.one_wire_bus_pin);
-    pages[2] = new ObdOil();
+    obd = new DefenderObd2();
+
+    Parameter *obd_oil = obd->get_parameter(0x5C);
+    Parameter *obd_rpm = obd->get_parameter(0x0C);
+
+    pages[0] = new ObdEngineRpm(*obd_rpm);
+    pages[1] = new ObdOil(*obd_oil);
+    pages[2] = new EnvironmentTemperature(unitconfig.one_wire_bus_pin);
     pages[3] = new GpsPosition();
     pages[4] = new Consumption();
     pages[5] = new Trip();
 
-    obd = new DefenderObd2();
 
     lcd = new Waveshare_LCD1602_RGB(unitconfig.lcd_cols,unitconfig.lcd_rows);  //16 characters and 2 lines of show
     lcd->init();
     lcd->noCursor();
     lcd->setRGB(unitconfig.lcd_red, unitconfig.lcd_green, unitconfig.lcd_blue);
+}
+
+Page *DefenderMenu::get_current_page() {
+    return pages[current_page];
 }
 
 void DefenderMenu::show_message(char *message, int delay_ms) {
@@ -65,7 +74,7 @@ int DefenderMenu::type_of_current_page() {
 
 void DefenderMenu::update_lcd_gauge() {
     lcd->setCursor(0, 1);
-    int lcd_gauge_value = (int) (unitconfig.lcd_cols/ 100.0 * (float)pages[current_page]->get_gauge_value());
+    int lcd_gauge_value = (int) (unitconfig.lcd_cols/ 100.0 * (float)get_current_page()->get_gauge_value());
 
     char filler = 255;
     char empty = 219;
@@ -84,9 +93,9 @@ void DefenderMenu::update_lcd_gauge() {
 void DefenderMenu::update_lcd(void) {
     lcd->clear();
     lcd->setCursor(0, 0);
-    lcd->send_string(pages[current_page]->lcd_first_line().c_str());
+    lcd->send_string(get_current_page()->lcd_first_line().c_str());
     lcd->setCursor(0, 1);
-    lcd->send_string(pages[current_page]->lcd_second_line().c_str());
+    lcd->send_string(get_current_page()->lcd_second_line().c_str());
 }
 
 int DefenderMenu::total_pages() {

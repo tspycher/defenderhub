@@ -5,11 +5,9 @@
 #ifndef DEFENDERHUB_ENVIRONMENTTEMPERATURE_H
 #define DEFENDERHUB_ENVIRONMENTTEMPERATURE_H
 
-
-
 #include <Arduino.h>
-#include "page.h"
-#include "sensorEnvironmentTemperature.h"
+#include <Page.h>
+#include <sensorEnvironmentTemperature.h>
 
 class EnvironmentTemperature : public Page {
 public:

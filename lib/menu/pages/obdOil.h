@@ -5,11 +5,12 @@
 #ifndef DEFENDERHUB_OBDOILTEMPERATURE_H
 #define DEFENDERHUB_OBDOILTEMPERATURE_H
 
-#include <Arduino.h>
-#include "page.h"
+#include <Page.h>
 
 class ObdOil : public Page {
 public:
+    ObdOil(Parameter &obd_parameter);
+    ObdOil();
     ~ObdOil();
     String lcd_first_line() override;
     String lcd_second_line() override;
