@@ -9,7 +9,7 @@
 
 class AbsoluteBarometricPressure : public Parameter {
 public:
-    AbsoluteBarometricPressure(MockSerial_CAN &can);
+    AbsoluteBarometricPressure(Serial_CAN &can);
     int get_value() override;
 };
 

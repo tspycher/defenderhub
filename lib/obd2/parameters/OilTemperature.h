@@ -10,7 +10,7 @@
 
 class OilTemperature : public Parameter{
 public:
-    OilTemperature(MockSerial_CAN &can);
+    OilTemperature(Serial_CAN &can);
     int get_value() override;
 };
 

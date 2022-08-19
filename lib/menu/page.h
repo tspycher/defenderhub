@@ -15,7 +15,7 @@
 class Page {
 public:
     Page();
-    Page(Parameter *obd_parameter);
+    Page(Parameter &obd_parameter);
     virtual ~Page() = default;
 
     virtual String lcd_first_line() = 0;

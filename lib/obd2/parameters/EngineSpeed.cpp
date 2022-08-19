@@ -5,7 +5,7 @@
 #include "EngineSpeed.h"
 
 
-EngineSpeed::EngineSpeed(MockSerial_CAN &can): Parameter(can) {
+EngineSpeed::EngineSpeed(Serial_CAN &can): Parameter(can) {
     pid = 0x0C;
     name = "RPM";
     unit = "rpm";

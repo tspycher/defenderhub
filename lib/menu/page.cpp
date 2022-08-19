@@ -7,7 +7,7 @@ Page::Page() : page_type(PAGE_TYPE_STATIC) {
     has_obd = false;
 }
 
-Page::Page(Parameter *obd_parameter) : page_type(PAGE_TYPE_STATIC), obd_parameter(obd_parameter) {
+Page::Page(Parameter &obd_parameter) : page_type(PAGE_TYPE_STATIC), obd_parameter(&obd_parameter) {
     has_obd = true;
 }
 

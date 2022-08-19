@@ -7,15 +7,20 @@
 #include "parameters/EngineSpeed.h"
 #include "parameters/AbsoluteBarometricPressure.h"
 
-DefenderObd2::DefenderObd2() {
-    can.begin(can_tx, can_rx, can_baud);
+DefenderObd2::DefenderObd2(bool mock_can) {
+    if (mock_can)
+        can = new MockSerial_CAN();
+    else
+        can = new Serial_CAN();
 
-    parameters[0] = new EngineSpeed(can);
-    parameters[1] = new AbsoluteBarometricPressure(can);
-    parameters[2] = new OilTemperature(can);
+    can->begin(can_tx, can_rx, can_baud);
+
+    parameters[0] = new EngineSpeed(*can);
+    parameters[1] = new AbsoluteBarometricPressure(*can);
+    parameters[2] = new OilTemperature(*can);
 
 
-    /*if(can.baudRate(SERIAL_RATE_115200)) {
+    /*if(can->baudRate(SERIAL_RATE_115200)) {
         Serial.println("Set Baudrate to 115200");
         delay(1000);
     } else {
@@ -23,7 +28,7 @@ DefenderObd2::DefenderObd2() {
         delay(1000);
     }
 
-    if(can.canRate(CAN_RATE_500)) {
+    if(can->canRate(CAN_RATE_500)) {
         Serial.println("Set CAN Rate to 500");
         delay(1000);
     } else {
@@ -56,7 +61,7 @@ bool DefenderObd2::debug() {
     unsigned long id = 0;
     unsigned char dta[8];
 
-    if(can.recv(&id, dta))
+    if(can->recv(&id, dta))
     {
         if (id < 2)
             return false;

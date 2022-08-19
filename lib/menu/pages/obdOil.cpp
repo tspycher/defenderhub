@@ -4,7 +4,7 @@
 
 #include "obdOil.h"
 
-ObdOil::ObdOil(Parameter &obd_parameter) : Page(&obd_parameter) {}
+ObdOil::ObdOil(Parameter &obd_parameter) : Page(obd_parameter) {}
 
 ObdOil::~ObdOil() {
 }

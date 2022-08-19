@@ -9,7 +9,7 @@
 
 class EngineSpeed : public Parameter {
 public:
-    EngineSpeed(MockSerial_CAN &can);
+    EngineSpeed(Serial_CAN &can);
     int get_value() override;
 };
 

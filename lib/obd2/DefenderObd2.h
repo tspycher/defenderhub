@@ -16,14 +16,14 @@
 
 class DefenderObd2 {
 public:
-    DefenderObd2();
+    DefenderObd2(bool);
     bool debug();
     int num_parameters();
     Parameter *get_parameter(int pid);
     Parameter *get_parameter(String name);
 private:
     Parameter *parameters[3];
-    MockSerial_CAN can;
+    Serial_CAN *can;
 };
 
 

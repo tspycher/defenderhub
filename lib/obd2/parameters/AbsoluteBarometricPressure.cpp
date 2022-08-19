@@ -5,7 +5,7 @@
 #include "AbsoluteBarometricPressure.h"
 
 
-AbsoluteBarometricPressure::AbsoluteBarometricPressure(MockSerial_CAN &can) : Parameter(can)  {
+AbsoluteBarometricPressure::AbsoluteBarometricPressure(Serial_CAN &can) : Parameter(can)  {
     pid = 0x33;
     name = "Absolute Barometric Pressure";
     unit = "kPa";

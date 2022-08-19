@@ -13,7 +13,7 @@
 #include <Arduino.h>
 
 DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig), is_defender_green(true){
-    obd = new DefenderObd2();
+    obd = new DefenderObd2(true);
 
     Parameter *obd_oil = obd->get_parameter(0x5C);
     Parameter *obd_rpm = obd->get_parameter(0x0C);

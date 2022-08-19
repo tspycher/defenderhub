@@ -39,7 +39,7 @@ class Stream;
 class SoftwareSerial;
 class HardwareSerial;
 
-class MockSerial_CAN
+class MockSerial_CAN : public Serial_CAN
 {
 private:
     unsigned char cmdOk(char *cmd);
@@ -48,9 +48,6 @@ private:
     void clear();
     void selfBaudRate(unsigned long baud);
     char str_tmp[100];
-    //SoftwareSerial *softwareSerial = NULL;
-    //HardwareSerial *hardwareSerial = NULL;
-    //Stream *canSerial = NULL;
 
 public:
     void begin(int can_tx, int can_rx, unsigned long baud);
