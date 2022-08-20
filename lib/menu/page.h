@@ -5,12 +5,10 @@
 #ifndef DEFENDERHUB_PAGE_H
 #define DEFENDERHUB_PAGE_H
 
-#include <Arduino.h>
-#include <Parameter.h>
-
 #define PAGE_TYPE_STATIC 0
 #define PAGE_TYPE_GAUGE 1
 
+#include <Parameter.h>
 
 class Page {
 public:

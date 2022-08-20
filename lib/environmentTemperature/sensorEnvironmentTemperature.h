@@ -17,10 +17,6 @@ public:
 private:
     const uint8_t index_outside;
     const uint8_t index_inside;
-
-    //const uint8_t INDEX_OUTSIDE = 0;
-    //const uint8_t INDEX_INSIDE = 1;
-    int last_sensor_update;
     DallasTemperature *sensors;
     OneWire *oneWire;
     float get_temperature_for_index(uint8_t index);

@@ -1,20 +1,14 @@
 //
 // Created by Thomas Spycher on 02.08.22.
 //
-#include <Arduino.h>
-#include <OneWire.h>
-#include <DallasTemperature.h>
 
 #include "sensorEnvironmentTemperature.h"
-
-
 
 SensorEnvironmentTemperature::SensorEnvironmentTemperature(int onewirebus, uint8_t index_outside, uint8_t index_inside) : index_outside(index_outside), index_inside(index_inside) {
     oneWire = new OneWire(onewirebus);
     sensors = new DallasTemperature(oneWire);
     sensors->begin();
     sensors->requestTemperatures();
-    last_sensor_update = millis();
 }
 
 float SensorEnvironmentTemperature::get_temperature_for_index(uint8_t index) {

@@ -3,7 +3,6 @@
 //
 
 #include "environmentTemperature.h"
-#include "sensorEnvironmentTemperature.h"
 
 
 EnvironmentTemperature::EnvironmentTemperature(int onewirebus) {

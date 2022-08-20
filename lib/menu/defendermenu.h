@@ -5,16 +5,11 @@
 #ifndef DEFENDERHUB_DEFENDERMENU_H
 #define DEFENDERHUB_DEFENDERMENU_H
 
-#include <Arduino.h>
 #include <Waveshare_LCD1602_RGB.h>
 #include <DefenderObd2.h>
-#include "pages/environmentTemperature.h"
-#include "pages/obdOil.h"
-#include "pages/gpsPosition.h"
-#include "pages/consumption.h"
-#include "pages/ObdEngineRpm.h"
-#include "pages/trip.h"
-#define PAGES 6
+#include "page.h"
+
+#define PAGES 4
 
 struct UnitConfig {
     uint8_t lcd_red=0;

@@ -5,7 +5,6 @@
 #ifndef DEFENDERHUB_PARAMETER_H
 #define DEFENDERHUB_PARAMETER_H
 
-#include <Arduino.h>
 #include "OBDFacade.h"
 
 #define CAN_ID_PID          0x7DF

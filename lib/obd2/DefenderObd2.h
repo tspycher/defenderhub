@@ -5,7 +5,6 @@
 #ifndef DEFENDERHUB_DEFENDEROBD2_H
 #define DEFENDERHUB_DEFENDEROBD2_H
 
-#include <Arduino.h>
 #include "parameters/OilTemperature.h"
 #include "parameters/EngineSpeed.h"
 #include "parameters/AbsoluteBarometricPressure.h"

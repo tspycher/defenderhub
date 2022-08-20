@@ -3,20 +3,25 @@
 //
 
 #include "defendermenu.h"
-
+#include "pages/environmentTemperature.h"
+#include "pages/obdOil.h"
+#include "pages/gpsPosition.h"
+#include "pages/consumption.h"
+#include "pages/ObdEngineRpm.h"
+#include "pages/trip.h"
 
 DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig), is_defender_green(true){
     obd = new DefenderObd2(true);
 
-    Parameter *obd_oil = obd->get_parameter(0x5C);
-    Parameter *obd_rpm = obd->get_parameter(0x0C);
+    //Parameter *obd_oil = obd->get_parameter(0x5C);
+    //Parameter *obd_rpm = obd->get_parameter(0x0C);
 
-    pages[0] = new ObdEngineRpm(*obd_rpm);
-    pages[1] = new ObdOil(*obd_oil);
-    pages[2] = new EnvironmentTemperature(unitconfig.one_wire_bus_pin);
-    pages[3] = new GpsPosition();
-    pages[4] = new Consumption();
-    pages[5] = new Trip();
+    pages[0] = new EnvironmentTemperature(unitconfig.one_wire_bus_pin);
+    //pages[1] = new ObdEngineRpm(*obd_rpm);
+    //pages[2] = new ObdOil(*obd_oil);
+    pages[1] = new GpsPosition();
+    pages[2] = new Consumption();
+    pages[3] = new Trip();
 
     lcd = new Waveshare_LCD1602_RGB(unitconfig.lcd_cols,unitconfig.lcd_rows);  //16 characters and 2 lines of show
     lcd->init();

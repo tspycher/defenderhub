@@ -3,7 +3,7 @@
 //
 
 #include "Equipment.h"
-#include "Arduino.h"
+#include <Arduino.h>
 
 
 Equipment::Equipment(Relay *relays) :relays(relays) {

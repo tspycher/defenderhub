@@ -5,7 +5,6 @@
 #ifndef DEFENDERHUB_EQUIPMENT_H
 #define DEFENDERHUB_EQUIPMENT_H
 
-#include <Arduino.h>
 
 
 struct Relay {

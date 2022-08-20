@@ -7,8 +7,10 @@
 OBDFacade::OBDFacade(bool isMocking) : is_mocking(isMocking) {
     if (isMocking) {
         obd_mock = new MockSerial_CAN();
+        Serial.println("Loading Mock CAN BUS");
     } else {
         obd_real = new Serial_CAN();
+        Serial.println("Loading Real CAN BUS");
     }
 }
 
