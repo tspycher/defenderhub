@@ -3,9 +3,7 @@
 //
 
 #include "MockSerial_CAN_Module.h"
-#include <SoftwareSerial.h>
-#include <HardwareSerial.h>
-#include <Arduino.h>
+
 
 
 void MockSerial_CAN::begin(int can_tx, int can_rx, unsigned long baud) {
@@ -16,19 +14,6 @@ void MockSerial_CAN::begin(int can_tx, int can_rx, unsigned long baud) {
     Serial.println("************** MOCK CAN STARTING UP **************");
 }
 
-void MockSerial_CAN::begin(SoftwareSerial &serial, unsigned long baud) {
-    /*serial.begin(baud);
-    softwareSerial = &serial;
-    canSerial = &serial;
-    */
-}
-
-void MockSerial_CAN::begin(HardwareSerial &serial, unsigned long baud) {
-    /*serial.begin(baud);
-    hardwareSerial = &serial;
-    canSerial = &serial;
-     */
-}
 
 unsigned char MockSerial_CAN::send(unsigned long id, uchar ext, uchar rtrBit, uchar len, const uchar *buf) {
     unsigned char dta[14] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -257,16 +242,6 @@ unsigned char MockSerial_CAN::exitSettingMode() {
     return ret;
 }
 
-void make8zerochar(int n, char *str, unsigned long num) {
-    for (int i = 0; i < n; i++) {
-        str[n - 1 - i] = num % 0x10;
-        if (str[n - 1 - i] < 10)str[n - 1 - i] += '0';
-        else str[n - 1 - i] = str[n - 1 - i] - 10 + 'A';
-        num >>= 4;
-    }
-    str[n] = '\0';
-}
-
 /*
 +++	                    Switch from Normal mode to Config mode
 AT+S=[value]	        Set serial baud rate
@@ -281,7 +256,7 @@ unsigned char MockSerial_CAN::setMask(unsigned long *dta) {
 
 
     for (int i = 0; i < 2; i++) {
-        make8zerochar(8, __str, dta[1 + 2 * i]);
+        //make8zerochar(8, __str, dta[1 + 2 * i]);
         //Serial.println(__str);
         sprintf(str_tmp, "AT+M=[%d][%d][", i, dta[2 * i]);
         for (int i = 0; i < 8; i++) {
@@ -315,7 +290,7 @@ unsigned char MockSerial_CAN::setFilt(unsigned long *dta) {
     char __str[10];
 
     for (int i = 0; i < 6; i++) {
-        make8zerochar(8, __str, dta[1 + 2 * i]);
+        //make8zerochar(8, __str, dta[1 + 2 * i]);
         //Serial.println(__str);
         sprintf(str_tmp, "AT+F=[%d][%d][", i, dta[2 * i]);
         for (int i = 0; i < 8; i++) {
@@ -341,67 +316,4 @@ unsigned char MockSerial_CAN::setFilt(unsigned long *dta) {
     }
     exitSettingMode();
     return 1;
-}
-
-/*
-value	        0	    1	    2	    3   	4
-baud rate(b/s)	9600	19200	38400	57600	115200
-*/
-unsigned char MockSerial_CAN::factorySetting() {
-    // check baudrate
-    unsigned long baud[5] = {9600, 19200, 38400, 57600, 115200};
-
-    for (int i = 0; i < 5; i++) {
-        selfBaudRate(baud[i]);
-        Serial.print("+++");
-        //canSerial->print("+++");
-        delay(100);
-
-        if (cmdOk("AT\r\n")) {
-            Serial.print("SERIAL BAUD RATE IS: ");
-            Serial.println(baud[i]);
-            baudRate(0);                // set serial baudrate to 9600
-            Serial.println("SET SERIAL BAUD RATE TO: 9600 OK");
-            selfBaudRate(9600);
-            break;
-        }
-    }
-
-    if (canRate(CAN_RATE_500)) {
-        Serial.println("SET CAN BUS BAUD RATE TO 500Kb/s OK");
-    } else {
-        Serial.println("SET CAN BUS BAUD RATE TO 500Kb/s FAIL");
-        return 0;
-    }
-
-    unsigned long mask[4] = {0, 0, 0, 0,};
-    unsigned long filt[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,};
-
-    if (setFilt(filt)) {
-        Serial.println("FACTORY SETTING FILTS OK");
-    } else {
-        Serial.println("FACTORY SETTING FILTS FAIL");
-        return 0;
-    }
-
-    if (setMask(mask)) {
-        Serial.println("FACTORY SETTING MASKS OK");
-    } else {
-        Serial.println("FACTORY SETTING MASKS FAIL");
-        return 0;
-    }
-
-    return 1;
-}
-
-void MockSerial_CAN::debugMode() {
-    while (Serial.available()) {
-        //canSerial->write(Serial.read());
-        //Serial.println(Serial.read());
-        Serial.println("What now?");
-    }
-
-    while (true) {
-        Serial.write("ehmm?");
-    }
 }

@@ -5,7 +5,7 @@
 #include "EngineSpeed.h"
 
 
-EngineSpeed::EngineSpeed(Serial_CAN &can): Parameter(can) {
+EngineSpeed::EngineSpeed(OBDFacade &can): Parameter(can) {
     pid = 0x0C;
     name = "RPM";
     unit = "rpm";

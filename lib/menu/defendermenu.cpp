@@ -3,14 +3,7 @@
 //
 
 #include "defendermenu.h"
-#include "pages/environmentTemperature.h"
-#include "pages/obdOil.h"
-#include "pages/gpsPosition.h"
-#include "pages/consumption.h"
-#include "pages/ObdEngineRpm.h"
-#include "pages/trip.h"
-#include <parameters/OilTemperature.h>
-#include <Arduino.h>
+
 
 DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig), is_defender_green(true){
     obd = new DefenderObd2(true);

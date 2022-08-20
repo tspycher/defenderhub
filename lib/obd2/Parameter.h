@@ -6,15 +6,13 @@
 #define DEFENDERHUB_PARAMETER_H
 
 #include <Arduino.h>
-#include <MockSerial_CAN_Module.h>
-#include <Serial_CAN_Module.h>
+#include "OBDFacade.h"
 
 #define CAN_ID_PID          0x7DF
 
-
 class Parameter {
 public:
-    Parameter(Serial_CAN &can);
+    Parameter(OBDFacade &can);
     void load_block(unsigned char raw_data[]);
     bool request_from_obd(unsigned int timeout_ms=1000);
     int get_current_value();
@@ -29,7 +27,7 @@ public:
 protected:
     virtual int get_value() = 0;
 
-    Serial_CAN *can;
+    OBDFacade *can;
 
     int pid;
     String name;

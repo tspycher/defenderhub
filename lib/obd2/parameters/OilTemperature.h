@@ -10,7 +10,7 @@
 
 class OilTemperature : public Parameter{
 public:
-    OilTemperature(Serial_CAN &can);
+    OilTemperature(OBDFacade &can);
     int get_value() override;
 };
 

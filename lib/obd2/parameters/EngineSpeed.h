@@ -9,7 +9,7 @@
 
 class EngineSpeed : public Parameter {
 public:
-    EngineSpeed(Serial_CAN &can);
+    EngineSpeed(OBDFacade &can);
     int get_value() override;
 };
 

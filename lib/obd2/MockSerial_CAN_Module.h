@@ -7,7 +7,6 @@
 
 // ID3 ID2 ID1 ID0 EXT RTR DTA0 DTA1 DTA2 DTA3 DTA4 DTA5 DTA6 DTA7
 #include <Arduino.h>
-#include <Serial_CAN_Module.h>
 #define uchar unsigned char
 
 
@@ -35,11 +34,11 @@
 #define SERIAL_RATE_38400   2
 #define SERIAL_RATE_115200  4
 
-class Stream;
-class SoftwareSerial;
-class HardwareSerial;
+//class Stream;
+//class SoftwareSerial;
+//class HardwareSerial;
 
-class MockSerial_CAN : public Serial_CAN
+class MockSerial_CAN
 {
 private:
     unsigned char cmdOk(char *cmd);
@@ -51,8 +50,6 @@ private:
 
 public:
     void begin(int can_tx, int can_rx, unsigned long baud);
-    void begin(SoftwareSerial &serial, unsigned long baud);
-    void begin(HardwareSerial &serial, unsigned long baud);
     unsigned char send(unsigned long id, uchar ext, uchar rtrBit, uchar len, const uchar *buf);
     unsigned char recv(unsigned long *id, uchar *buf);
 
@@ -61,9 +58,5 @@ public:
 
     unsigned char setMask(unsigned long *dta);
     unsigned char setFilt(unsigned long *dta);
-
-    unsigned char factorySetting();
-    void debugMode();
-
 };
 #endif //DEFENDEROBD_MOCKSERIAL_CAN_MODULE_H

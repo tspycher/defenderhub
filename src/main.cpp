@@ -1,6 +1,6 @@
 #include <Arduino.h>
-#include "defendermenu.h"
-#include "Equipment.h"
+#include <defendermenu.h>
+#include <Equipment.h>
 #include <MemoryUsage.h>
 
 #include <Wire.h>

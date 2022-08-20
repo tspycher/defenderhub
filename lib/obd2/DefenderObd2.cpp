@@ -3,15 +3,11 @@
 //
 
 #include "DefenderObd2.h"
-#include "parameters/OilTemperature.h"
-#include "parameters/EngineSpeed.h"
-#include "parameters/AbsoluteBarometricPressure.h"
+
 
 DefenderObd2::DefenderObd2(bool mock_can) {
-    if (mock_can)
-        can = new MockSerial_CAN();
-    else
-        can = new Serial_CAN();
+
+    can = new OBDFacade(mock_can);
 
     can->begin(can_tx, can_rx, can_baud);
 

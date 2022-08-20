@@ -9,7 +9,7 @@
 
 class AbsoluteBarometricPressure : public Parameter {
 public:
-    AbsoluteBarometricPressure(Serial_CAN &can);
+    AbsoluteBarometricPressure(OBDFacade &can);
     int get_value() override;
 };
 

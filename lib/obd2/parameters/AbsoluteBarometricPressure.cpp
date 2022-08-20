@@ -5,7 +5,7 @@
 #include "AbsoluteBarometricPressure.h"
 
 
-AbsoluteBarometricPressure::AbsoluteBarometricPressure(Serial_CAN &can) : Parameter(can)  {
+AbsoluteBarometricPressure::AbsoluteBarometricPressure(OBDFacade &can) : Parameter(can)  {
     pid = 0x33;
     name = "Absolute Barometric Pressure";
     unit = "kPa";

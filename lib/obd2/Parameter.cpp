@@ -4,7 +4,7 @@
 
 #include "Parameter.h"
 
-Parameter::Parameter(Serial_CAN &can) : can(&can), pid(0x00), name("UNKNOWN"), unit("?"), previous_value(0), current_value(0) {}
+Parameter::Parameter(OBDFacade &can) : can(&can), pid(0x00), name("UNKNOWN"), unit("?"), previous_value(0), current_value(0) {}
 
 int Parameter::get_current_value() {
     return current_value;

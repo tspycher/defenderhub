@@ -4,7 +4,7 @@
 
 #include "OilTemperature.h"
 
-OilTemperature::OilTemperature(Serial_CAN &can) : Parameter(can)  {
+OilTemperature::OilTemperature(OBDFacade &can) : Parameter(can)  {
     pid = 0x5C;
     name = "Engine oil temperature";
     unit = "C";

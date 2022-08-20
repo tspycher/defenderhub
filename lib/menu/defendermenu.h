@@ -5,10 +5,15 @@
 #ifndef DEFENDERHUB_DEFENDERMENU_H
 #define DEFENDERHUB_DEFENDERMENU_H
 
-#include "page.h"
+#include <Arduino.h>
 #include <Waveshare_LCD1602_RGB.h>
 #include <DefenderObd2.h>
-
+#include "pages/environmentTemperature.h"
+#include "pages/obdOil.h"
+#include "pages/gpsPosition.h"
+#include "pages/consumption.h"
+#include "pages/ObdEngineRpm.h"
+#include "pages/trip.h"
 #define PAGES 6
 
 struct UnitConfig {
