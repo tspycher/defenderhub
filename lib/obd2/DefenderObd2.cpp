@@ -12,8 +12,10 @@ DefenderObd2::DefenderObd2(bool mock_can) {
     can->begin(can_tx, can_rx, can_baud);
 
     parameters[0] = new EngineSpeed(*can);
-    parameters[1] = new AbsoluteBarometricPressure(*can);
-    parameters[2] = new OilTemperature(*can);
+    //parameters[1] = new AbsoluteBarometricPressure(*can);
+    //parameters[2] = new OilTemperature(*can);
+
+
 
 
     /*if(can->baudRate(SERIAL_RATE_115200)) {

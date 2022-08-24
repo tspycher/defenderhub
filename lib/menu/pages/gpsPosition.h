@@ -9,8 +9,6 @@
 
 class GpsPosition : public Page {
 public:
-    ~GpsPosition();
-
     String lcd_first_line() override;
     String lcd_second_line() override;
 };

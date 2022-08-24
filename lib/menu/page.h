@@ -12,9 +12,9 @@
 
 class Page {
 public:
-    Page();
-    Page(Parameter &obd_parameter);
-    virtual ~Page() = default;
+    Page() : page_type(PAGE_TYPE_STATIC), has_obd(false) {};
+    Page(int) : page_type(PAGE_TYPE_STATIC), has_obd(false) {};
+    Page(Parameter &obd_parameter): page_type(PAGE_TYPE_STATIC), has_obd(true), obd_parameter(&obd_parameter) {};
 
     virtual String lcd_first_line() = 0;
     virtual String lcd_second_line() = 0;

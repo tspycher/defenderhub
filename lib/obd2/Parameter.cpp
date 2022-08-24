@@ -4,7 +4,17 @@
 
 #include "Parameter.h"
 
-Parameter::Parameter(OBDFacade &can) : can(&can), pid(0x00), name("UNKNOWN"), unit("?"), previous_value(0), current_value(0) {}
+Parameter::Parameter(OBDFacade &can) : can(&can), pid(0x00), name("UNKNOWN"), unit("?"), previous_value(0), current_value(0) {
+    /*if (request_from_obd()) {
+        Serial.print("Sucessfully Initialized OBD Parameter ");
+        Serial.print(name);
+        Serial.println(pid);
+    } else {
+        Serial.print("!!!could not initialized OBD Parameter ");
+        Serial.print(name);
+        Serial.println(pid);
+    }*/
+}
 
 int Parameter::get_current_value() {
     return current_value;
@@ -40,6 +50,7 @@ bool Parameter::request_from_obd(unsigned int timeout_ms) {
             }
         }
     }
+    is_initialized = false;
     return false;
 }
 
@@ -68,6 +79,7 @@ void Parameter::load_block(unsigned char raw_data[]) {
     }
     Serial.println("Done");
     current_value = get_value();
+    is_initialized = true;
 }
 
 int Parameter::get_a() {

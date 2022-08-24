@@ -10,7 +10,6 @@
 class ObdEngineRpm : public Page {
 public:
     ObdEngineRpm(Parameter &obd_parameter);
-    ~ObdEngineRpm();
     String lcd_first_line() override;
     String lcd_second_line() override;
     int get_gauge_value() override;

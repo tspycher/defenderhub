@@ -9,8 +9,6 @@
 
 class Consumption : public Page {
 public:
-    ~Consumption();
-
     String lcd_first_line() override;
     String lcd_second_line() override;
 };

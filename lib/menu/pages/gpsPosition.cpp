@@ -3,10 +3,6 @@
 //
 
 #include "gpsPosition.h"
-#include <Arduino.h>
-
-GpsPosition::~GpsPosition() {
-}
 
 String GpsPosition::lcd_first_line() {
     return "47.470833 N";

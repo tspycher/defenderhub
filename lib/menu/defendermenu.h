@@ -9,7 +9,7 @@
 #include <DefenderObd2.h>
 #include "page.h"
 
-#define PAGES 4
+#define PAGES 5
 
 struct UnitConfig {
     uint8_t lcd_red=0;

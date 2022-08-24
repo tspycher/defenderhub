@@ -8,9 +8,6 @@ ObdEngineRpm::ObdEngineRpm(Parameter &obd_parameter) : Page(obd_parameter){
     page_type = PAGE_TYPE_GAUGE;
 }
 
-ObdEngineRpm::~ObdEngineRpm() {
-}
-
 int ObdEngineRpm::get_gauge_value() {
     return (int) (100.0 / 1000.0 * get_obd_value());
 }
@@ -21,7 +18,7 @@ float ObdEngineRpm::get_obd_value() {
 }
 
 String ObdEngineRpm::lcd_first_line() {
-    return "RPM";
+    return String("RPM " + (int)get_obd_value());
 }
 
 String ObdEngineRpm::lcd_second_line() {

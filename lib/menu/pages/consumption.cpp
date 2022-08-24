@@ -4,9 +4,6 @@
 
 #include "consumption.h"
 
-Consumption::~Consumption() {
-}
-
 String Consumption::lcd_first_line() {
     return "Trip:       12.2";
 }

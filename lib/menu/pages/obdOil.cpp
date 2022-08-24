@@ -6,8 +6,6 @@
 
 ObdOil::ObdOil(Parameter &obd_parameter) : Page(obd_parameter) {}
 
-ObdOil::~ObdOil() {
-}
 
 int ObdOil::obd_oil_pressure() {
     return 45;

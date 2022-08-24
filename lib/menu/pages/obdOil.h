@@ -10,8 +10,6 @@
 class ObdOil : public Page {
 public:
     ObdOil(Parameter &obd_parameter);
-    ObdOil();
-    ~ObdOil();
     String lcd_first_line() override;
     String lcd_second_line() override;
 private:

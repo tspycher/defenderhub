@@ -9,8 +9,6 @@
 
 class Trip : public Page {
 public:
-    ~Trip();
-
     String lcd_first_line() override;
     String lcd_second_line() override;
 };

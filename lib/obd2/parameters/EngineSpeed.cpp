@@ -16,5 +16,8 @@ EngineSpeed::EngineSpeed(OBDFacade &can): Parameter(can) {
 }
 
 int EngineSpeed::get_value() {
-    return (256*get_a()+get_b())/4;
+    if(is_initialized) {
+        return (256*get_a()+get_b())/4;
+    }
+    return 0;
 }

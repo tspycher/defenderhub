@@ -10,8 +10,6 @@
 
 class EnvironmentTemperature : public Page {
 public:
-    ~EnvironmentTemperature();
-
     EnvironmentTemperature(int onewirebus);
     String lcd_first_line() override;
     String lcd_second_line() override;

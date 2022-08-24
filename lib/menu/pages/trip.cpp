@@ -4,9 +4,6 @@
 
 #include "trip.h"
 
-Trip::~Trip() {
-}
-
 String Trip::lcd_first_line() {
     return "Distance:   99km";
 }

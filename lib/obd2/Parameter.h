@@ -25,7 +25,7 @@ public:
 
 protected:
     virtual int get_value() = 0;
-
+    bool is_initialized;
     OBDFacade *can;
 
     int pid;

@@ -22,7 +22,7 @@ public:
     Parameter *get_parameter(int pid);
     Parameter *get_parameter(String name);
 private:
-    Parameter *parameters[3];
+    Parameter *parameters[1];
     OBDFacade *can;
 };
 
