@@ -11,13 +11,13 @@
 #include "pages/trip.h"
 
 DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig), is_defender_green(true){
-    obd = new DefenderObd2(true);
+    obd = new DefenderObd2(unitconfig.mock_can);
 
     //Parameter *obd_oil = obd->get_parameter(0x5C);
     Parameter *obd_rpm = obd->get_parameter(0x0C);
 
-    pages[0] = new EnvironmentTemperature(unitconfig.one_wire_bus_pin);
-    pages[1] = new ObdEngineRpm(*obd_rpm);
+    pages[0] = new ObdEngineRpm(*obd_rpm);
+    pages[1] = new EnvironmentTemperature(unitconfig.one_wire_bus_pin);
     //pages[2] = new ObdOil(*obd_oil);
     pages[2] = new GpsPosition();
     pages[3] = new Consumption();
@@ -74,6 +74,16 @@ int DefenderMenu::type_of_current_page() {
 }
 
 void DefenderMenu::update_lcd_gauge() {
+    lcd->setCursor(0, 0);
+
+    String first_line = pages[current_page]->lcd_first_line();
+    lcd->send_string(first_line.c_str());
+    if (first_line.length() < (unsigned int)unitconfig.lcd_cols) {
+        for (int i = first_line.length(); i < unitconfig.lcd_cols; ++i) {
+            lcd->write_char((char)32);
+        }
+    }
+
     lcd->setCursor(0, 1);
     int lcd_gauge_value = (int) (unitconfig.lcd_cols/ 100.0 * (float)pages[current_page]->get_gauge_value());
 
@@ -101,6 +111,10 @@ void DefenderMenu::update_lcd(void) {
 
 int DefenderMenu::total_pages() {
     return sizeof(pages)/sizeof(pages[0]);
+}
+
+void DefenderMenu::switch_page(int page) {
+    current_page = page % total_pages();
 }
 
 void DefenderMenu::switch_page() {

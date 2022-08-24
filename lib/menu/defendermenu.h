@@ -18,6 +18,7 @@ struct UnitConfig {
     int lcd_cols = 16;
     int lcd_rows = 2;
     int one_wire_bus_pin = 3;
+    bool mock_can=false;
 };
 
 class DefenderMenu {
@@ -30,6 +31,8 @@ public:
 
     void update_current_page_data();
     void switch_page();
+    void switch_page(int);
+
     void special_option(); // long pressed button
     void extra_special_option(); // very long pressed button
     Page *get_current_page();

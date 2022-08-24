@@ -34,6 +34,7 @@ void setup() {
     // CONFIGURE THE DISPLAY
     struct UnitConfig config;
     config.lcd_green = 100;
+    config.mock_can = true;
 
     // CONFIGURE PINS
     pinMode(LED_BUILTIN, OUTPUT);
@@ -48,6 +49,7 @@ void setup() {
     Serial.println("**** Defender Hub started ****");
     defender_menu = new DefenderMenu(config);
     defender_menu->welcome_screen(1);
+    defender_menu->switch_page(0);
     defender_menu->update_lcd();
 }
 

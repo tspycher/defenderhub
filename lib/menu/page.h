@@ -21,6 +21,8 @@ public:
     int get_page_type();
     void update_values();
     virtual int get_gauge_value() { return 0; }
+
+
 protected:
     int page_type = 0;
     bool has_obd;
