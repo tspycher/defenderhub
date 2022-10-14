@@ -95,7 +95,6 @@
 #define NOTE_D8  4699
 #define NOTE_DS8 4978
 
-#define PIEZO_PIN 5
 #define DELAY_LONG 500
 #define DELAY_LONG2 750
 
@@ -105,9 +104,11 @@
 
 class Sound {
 public:
+    Sound(int piezo_pin): piezo_pin(piezo_pin) {};
     void play_welcome();
     void play_page_switch();
-
+private:
+    int piezo_pin;
 };
 
 

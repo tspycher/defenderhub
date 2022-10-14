@@ -5,16 +5,23 @@
 #include "environmentTemperature.h"
 
 
-EnvironmentTemperature::EnvironmentTemperature(int onewirebus) {
+EnvironmentTemperature::EnvironmentTemperature(int onewirebus) : age(0) {
     sensor = new SensorEnvironmentTemperature(onewirebus);
+    update_values();
+}
+
+void EnvironmentTemperature::update_values() {
+    if (millis() - age >= 10000) {
+        tmp_inside = sensor->get_temperature_inside();
+        tmp_outside = sensor->get_temperature_outside();
+        age = millis();
+    }
 }
 
 String EnvironmentTemperature::lcd_first_line() {
-    float temperature = sensor->get_temperature_outside();
-    return "Outside:  " + (String)temperature + (char)223;
+    return "Outside:  " + (String)tmp_outside + (char)223;
 }
 
 String EnvironmentTemperature::lcd_second_line() {
-    float temperature = sensor->get_temperature_inside();
-    return "Inside:   " + (String)temperature + (char)223;
+    return "Inside:   " + (String)tmp_inside + (char)223;
 }

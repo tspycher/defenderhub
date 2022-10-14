@@ -12,20 +12,18 @@
 
 class Page {
 public:
-    Page() : page_type(PAGE_TYPE_STATIC), has_obd(false) {};
-    Page(int) : page_type(PAGE_TYPE_STATIC), has_obd(false) {};
-    Page(Parameter &obd_parameter): page_type(PAGE_TYPE_STATIC), has_obd(true), obd_parameter(&obd_parameter) {};
+    Page() : page_type(PAGE_TYPE_STATIC) {};
+    Page(int) : page_type(PAGE_TYPE_STATIC) {};
 
     virtual String lcd_first_line() = 0;
     virtual String lcd_second_line() = 0;
     int get_page_type();
-    void update_values();
+    virtual void update_values() { return; }
     virtual int get_gauge_value() { return 0; }
 
 
 protected:
     int page_type = 0;
-    bool has_obd;
     Parameter *obd_parameter;
 };
 
