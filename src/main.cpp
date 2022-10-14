@@ -27,14 +27,22 @@ Equipment *equipment;
 
 void setup() {
     // CONFIGURING RELAYS
-    struct Relay relay1 = {4, (char*)"Radio"};
-    Relay relays[] = {relay1};
-    equipment = new Equipment(relays);
+    struct Relay relay0 = {0,0, (char*)"Radio"};
+    struct Relay relay1 = {1,1, (char*)"Light1"};
+    struct Relay relay2 = {2,2, (char*)"Light2"};
+    struct Relay relay3 = {3,3, (char*)"Light3"};
+    struct Relay relay4 = {4,4, (char*)"Light Inside"};
+    struct Relay relay5 = {5,5, (char*)"Other"};
+    struct Relay relay6 = {6,6, (char*)"This"};
+    struct Relay relay7 = {7,7, (char*)"That"};
+
+    Relay relays[] = {relay0,relay1, relay2, relay3, relay4, relay5, relay6, relay7};
+    //equipment = new Equipment(relays, sizeof relays / sizeof relays[0]);
 
     // CONFIGURE THE DISPLAY
     struct UnitConfig config;
     config.lcd_green = 100;
-    config.mock_can = true;
+    config.mock_can = false;
 
     // CONFIGURE PINS
     pinMode(LED_BUILTIN, OUTPUT);
@@ -152,5 +160,7 @@ void loop() {
             Serial.println("No thread registered for id: "+thread);
             break;
     }
+    //equipment->check_button_states();
+
     ++looper;
 }

@@ -4,11 +4,12 @@
 
 #include "defendermenu.h"
 #include "pages/environmentTemperature.h"
-//#include "pages/obdOil.h"
+#include "pages/obdOil.h"
 #include "pages/gpsPosition.h"
 #include "pages/consumption.h"
 #include "pages/ObdEngineRpm.h"
 #include "pages/trip.h"
+#include "sound.h"
 
 DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig), is_defender_green(true){
     obd = new DefenderObd2(unitconfig.mock_can);
@@ -18,6 +19,7 @@ DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig
 
     pages[0] = new ObdEngineRpm(*obd_rpm);
     pages[1] = new EnvironmentTemperature(unitconfig.one_wire_bus_pin);
+
     //pages[2] = new ObdOil(*obd_oil);
     pages[2] = new GpsPosition();
     pages[3] = new Consumption();
@@ -61,10 +63,14 @@ void DefenderMenu::display_animated_text(String text, int row, int step_ms) {
     }
 }
 
-void DefenderMenu::welcome_screen(int delay_seconds) {
-    display_animated_text(String("  DEFENDER 110  "), 0, 50);
-    display_animated_text(String("one life,live it"), 1, 80);
+void DefenderMenu::welcome_screen(int delay_seconds, bool with_music) {
+    display_animated_text(String("  DEFENDER 110  "), 0, 30);
+    display_animated_text(String("one life,live it"), 1, 40);
 
+    if (with_music) {
+        Sound s;
+        s.play_welcome();
+    }
     delay(delay_seconds*1000);
     lcd->clear();
 }
@@ -119,6 +125,8 @@ void DefenderMenu::switch_page(int page) {
 
 void DefenderMenu::switch_page() {
     current_page = (current_page+1) % total_pages();
+    Sound s;
+    s.play_page_switch();
 }
 
 void DefenderMenu::special_option() {
