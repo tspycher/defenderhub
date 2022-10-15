@@ -36,8 +36,8 @@ public:
     void switch_page(int);
     int get_current_page();
     int type_of_current_page();
-private:
     Page *get_page();
+private:
     int num_pages;
     int current_page = 0;
     UnitConfig unitconfig;

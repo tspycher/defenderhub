@@ -101,7 +101,7 @@ void DefenderMenu::update_lcd_gauge() {
 
 void DefenderMenu::update_lcd() {
     Serial.println("updating lcd...");
-    get_page()->update_values();
+    //get_page()->update_values();
 
     lcd->clear();
     lcd->setCursor(0, 0);

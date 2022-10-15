@@ -11,6 +11,7 @@ class Version : public Page {
 public:
     String lcd_first_line() override;
     String lcd_second_line() override;
+    int refreshrate_seconds() override;
 };
 
 

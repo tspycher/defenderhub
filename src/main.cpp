@@ -16,7 +16,7 @@
 #define BUTTON_LONG_PRESS 3000
 #define BUTTON_VERY_LONG_PRESS 5000
 
-const unsigned long UPDATE_TIMER = 10 * 1000;
+//const unsigned long UPDATE_TIMER = 10 * 1000;
 const unsigned long UPDATE2_TIMER = 0.1 * 1000;
 
 
@@ -130,17 +130,19 @@ void switch_equipment(bool on, int index) {
 
 // Pseudo Thread 0 Loop, Slow Update
 void loop_thread0() { // Slow Thread
-    if (millis() % UPDATE_TIMER == 0) {
-        //memory_state();
-        toggle_alive_led();
-        defender_menu->update_lcd();
+    if (millis() % (defender_menu->get_page()->refreshrate_seconds() * 1000) == 0) {
+        defender_menu->get_page()->update_values();
+        if (defender_menu->get_page()->needs_lcd_update()) {
+            //memory_state();
+            toggle_alive_led();
+            defender_menu->update_lcd();
+        }
     }
 }
 
 // Pseudo Thread 1 Loop, Fast Update
 void loop_thread1() { // Fast Thread
     defender_menu->perform_interrupt_switch_page();
-
     if (millis() % UPDATE2_TIMER == 0) {
         if (defender_menu->type_of_current_page() == PAGE_TYPE_GAUGE) {
             defender_menu->update_current_page_data();

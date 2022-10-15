@@ -13,11 +13,13 @@ public:
     String lcd_first_line() override;
     String lcd_second_line() override;
     void update_values() override;
-
+    int refreshrate_seconds() override;
+    bool needs_lcd_update() override;
 private:
-    //int values[360];
     char *needle[360];
     int course;
+    int previous_course;
+
 };
 
 

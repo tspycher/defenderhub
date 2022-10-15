@@ -5,6 +5,9 @@
 #include "Version.h"
 #include "versiondetails.h"
 
+int Version::refreshrate_seconds() {
+    return 500;
+}
 
 String Version::lcd_first_line() {
     return String(BUILDTIME);

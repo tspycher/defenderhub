@@ -22,7 +22,7 @@ int int_at_position(int n, int p) {
     return n / pp;
 }
 
-Compass::Compass() {
+Compass::Compass() : course(1) {
     for (int i = 0; i < 360; ++i) {
         if(i == 0) {
             needle[i] = "N";
@@ -40,22 +40,28 @@ Compass::Compass() {
     }
 }
 
+bool Compass::needs_lcd_update() {
+    if (previous_course != course) {
+        return true;
+    }
+    return false;
+}
+
+int Compass::refreshrate_seconds() {
+    return 1;
+}
+
 void Compass::update_values() {
-    course = 90;
+    previous_course = course;
+    course = (course + 1) % 360;
 }
 
 String Compass::lcd_first_line() {
-    //int steps = 5;
-    //int left = (course - steps + 360) % 360;
-    //int right = (course + steps) % 360;
-    //int total = get_len(left) + get_len(course) + get_len(right);
     int total = get_len(course);
     String s;
     for (int x = 0; x < (16 - total) / 2; ++x)
         s += String(" ");
-    //return String(left)+String(s)+String(course)+String(s)+String(right);
     return String(s)+String(course)+(char)223;
-
 }
 
 String Compass::lcd_second_line() {

@@ -14,11 +14,15 @@ public:
     String lcd_first_line() override;
     String lcd_second_line() override;
     void update_values() override;
+    int refreshrate_seconds() override;
+    bool needs_lcd_update() override;
+
 private:
     SensorEnvironmentTemperature *sensor;
-    float tmp_inside;
-    float tmp_outside;
-    int age;
+    float tmp_inside = 0.0;
+    float tmp_outside= 0.0 ;
+    float previous_tmp_inside;
+    float previous_tmp_outside;
 };
 
 #endif //DEFENDERHUB_ENVIRONMENTTEMPERATURE_H
