@@ -3,11 +3,13 @@
 //
 
 #include "Version.h"
+#include "versiondetails.h"
+
 
 String Version::lcd_first_line() {
-    return "Version: 0.1";
+    return String(BUILDTIME);
 }
 
 String Version::lcd_second_line() {
-    return "October 2022";
+    return String(VERSION);
 }

@@ -45,7 +45,7 @@ private:
     Waveshare_LCD1602_RGB *lcd;
     int total_pages();
     Sound *sound;
-    Page *pages[3];
+    Page *pages[4];
     bool interrupt_switch_page = false;
 };
 

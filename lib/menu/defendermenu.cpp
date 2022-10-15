@@ -5,14 +5,16 @@
 #include "defendermenu.h"
 #include "pages/environmentTemperature.h"
 #include "pages/gpsPosition.h"
+#include "pages/Compass.h"
 #include "pages/version.h"
 #include "sound.h"
 
 DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig) {
     pages[0] = new EnvironmentTemperature(unitconfig.one_wire_bus_pin);
-    pages[1] = new GpsPosition();
-    pages[2] = new Version();
-    num_pages = 3; //sizeof(&pages)/sizeof(pages[0]);
+    pages[1] = new Compass();
+    pages[2] = new GpsPosition();
+    pages[3] = new Version();
+    num_pages = 4; //sizeof(&pages)/sizeof(pages[0]);
 
     lcd = new Waveshare_LCD1602_RGB(unitconfig.lcd_cols,unitconfig.lcd_rows);  //16 characters and 2 lines of show
     lcd->init();
