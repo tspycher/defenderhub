@@ -143,7 +143,7 @@ void loop_thread0() { // Slow Thread
         defender_menu->get_page()->update_values();
         if (defender_menu->get_page()->needs_lcd_update()) {
             //memory_state();
-            //defender_menu->update_lcd();
+            defender_menu->update_lcd();
         }
     }
 }
@@ -154,6 +154,7 @@ void loop_thread1() { // Fast Thread
     if (millis() % UPDATE2_TIMER == 0) {
         Serial.println("**** Thread 1 ****");
         defender_menu->update_gps(true);
+
         if (defender_menu->type_of_current_page() == PAGE_TYPE_GAUGE) {
             //defender_menu->update_current_page_data();
             //defender_menu->update_lcd_gauge();

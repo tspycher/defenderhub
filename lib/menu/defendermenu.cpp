@@ -160,12 +160,12 @@ DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig
 
     pages[1] = new Compass();
     Serial.println("----> Compass Page Loaded");
-
-    pages[2] = new GpsPosition();
-    Serial.println("----> GpsPosition Page Loaded");
     */
+    pages[1] = new GpsPosition();
+    Serial.println("----> GpsPosition Page Loaded");
 
-    num_pages = 1; //sizeof(&pages)/sizeof(pages[0]);
+
+    num_pages = 2; //sizeof(&pages)/sizeof(pages[0]);
     Serial.println("--> Pages Configured");
     //lcd = new Waveshare_LCD1602_RGB(unitconfig.lcd_cols,unitconfig.lcd_rows);  //16 characters and 2 lines of show
     /*lcd->init();
@@ -180,8 +180,8 @@ DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig
     oled = new Adafruit_SSD1351(unitconfig.oled_screen_width, unitconfig.oled_screen_height, unitconfig.oled_cs_pin, unitconfig.oled_dc_pin, unitconfig.oled_mosi_pin, unitconfig.oled_sclk_pin, unitconfig.oled_rst_pin);
     Serial.println("--> OLED Configured");
 
-    //gps_serial = new SoftwareSerial(unitconfig.gps_tx, unitconfig.gps_rx);
-    //gps = new TinyGPSPlus();
+    gps_serial = new SoftwareSerial(unitconfig.gps_tx, unitconfig.gps_rx);
+    gps = new TinyGPSPlus();
     Serial.println("--> GPS Configured");
 
     // init OLED
@@ -191,8 +191,8 @@ DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig
     Serial.println("--> OLED Initialized");
 
     // init GPS
-    //gps_serial->begin(unitconfig.gps_baud);
-    //gps_ready = true;
+    gps_serial->begin(unitconfig.gps_baud);
+    gps_ready = true;
     Serial.println("--> GPS Initialized");
 }
 
