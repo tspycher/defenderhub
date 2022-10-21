@@ -152,8 +152,8 @@ void loop_thread0() { // Slow Thread
 void loop_thread1() { // Fast Thread
     defender_menu->perform_interrupt_switch_page();
     if (millis() % UPDATE2_TIMER == 0) {
-        Serial.println("**** Thread 1 ****");
-        defender_menu->update_gps(true);
+        //Serial.println("**** Thread 1 ****");
+        defender_menu->update_gps(false);
 
         if (defender_menu->type_of_current_page() == PAGE_TYPE_GAUGE) {
             //defender_menu->update_current_page_data();

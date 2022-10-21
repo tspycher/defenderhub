@@ -151,22 +151,7 @@ const unsigned char small_logo [] PROGMEM = {
 
 DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig), oled_ready(false), lcd_ready(false), gps_ready(false) {
     Serial.println("--> Starting up Menu");
-    pages[0] = new Version();
-    Serial.println("----> Version Page Loaded");
 
-    /*
-    //pages[1] = new EnvironmentTemperature(unitconfig.one_wire_bus_pin);
-    //Serial.println("----> EnvironmentTemperature Page Loaded");
-
-    pages[1] = new Compass();
-    Serial.println("----> Compass Page Loaded");
-    */
-    pages[1] = new GpsPosition();
-    Serial.println("----> GpsPosition Page Loaded");
-
-
-    num_pages = 2; //sizeof(&pages)/sizeof(pages[0]);
-    Serial.println("--> Pages Configured");
     //lcd = new Waveshare_LCD1602_RGB(unitconfig.lcd_cols,unitconfig.lcd_rows);  //16 characters and 2 lines of show
     /*lcd->init();
     lcd->noCursor();
@@ -194,6 +179,23 @@ DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig
     gps_serial->begin(unitconfig.gps_baud);
     gps_ready = true;
     Serial.println("--> GPS Initialized");
+
+    pages[0] = new GpsPosition(gps);
+    Serial.println("----> GpsPosition Page Loaded");
+
+    pages[1] = new Version();
+    Serial.println("----> Version Page Loaded");
+
+    /*
+    //pages[1] = new EnvironmentTemperature(unitconfig.one_wire_bus_pin);
+    //Serial.println("----> EnvironmentTemperature Page Loaded");
+
+    pages[1] = new Compass();
+    Serial.println("----> Compass Page Loaded");
+    */
+
+    num_pages = 2; //sizeof(&pages)/sizeof(pages[0]);
+    Serial.println("--> Pages Configured");
 }
 
 void DefenderMenu::update_current_page_data() {
@@ -284,6 +286,7 @@ void DefenderMenu::update_lcd_gauge() {
 
 void DefenderMenu::draw_base_menu() {
     if(oled_ready) {
+        // header
         oled->fillScreen(BLACK);
         oled->setCursor(0, 3);
         oled->setTextColor(GREEN);
@@ -291,6 +294,13 @@ void DefenderMenu::draw_base_menu() {
         oled->print(get_page()->get_page_name());
         oled->drawLine(0, 15, 128, 15, GREEN);
         oled->drawBitmap(unitconfig.oled_screen_width - 34, 0, small_logo, 34, 15, GREEN);
+
+        // footer
+        int y = 128-7;
+        oled->setCursor(29, y);
+        //oled->print(gps->date.value());
+        oled->print("Defender 110");
+        oled->drawLine(0, y-3, 128, y-3, GREEN);
     }
 }
 
@@ -319,8 +329,8 @@ int DefenderMenu::get_current_page() {
 }
 
 void DefenderMenu::switch_page(int page) {
-    draw_base_menu();
     current_page = page % total_pages();
+    draw_base_menu();
 }
 
 void DefenderMenu::switch_page() {

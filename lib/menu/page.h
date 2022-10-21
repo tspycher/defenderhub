@@ -33,7 +33,7 @@ public:
 
 protected:
     int page_type = 0;
-    void update_label(Adafruit_SSD1351 oled, const char label[], const char value[], int x, int y, int h, int color=0x07E0);
+    void update_label(Adafruit_SSD1351 oled, const char label[], const char value[], int x, int y, int h, bool big_value=false, int color=0x07E0);
 };
 
 #endif //DEFENDERHUB_PAGE_H
