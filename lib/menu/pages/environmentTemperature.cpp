@@ -7,7 +7,7 @@
 
 EnvironmentTemperature::EnvironmentTemperature(int onewirebus) {
     sensor = new SensorEnvironmentTemperature(onewirebus);
-    update_values();
+    //update_values();
 }
 
 bool EnvironmentTemperature::needs_lcd_update() {
@@ -35,4 +35,8 @@ String EnvironmentTemperature::lcd_first_line() {
 
 String EnvironmentTemperature::lcd_second_line() {
     return "Inside:   " + (String)tmp_inside + (char)223;
+}
+
+void EnvironmentTemperature::draw_on_oled_screen(Adafruit_SSD1351 oled, int oled_width, int oled_heigh) {
+
 }

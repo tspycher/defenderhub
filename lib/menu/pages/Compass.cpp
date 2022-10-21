@@ -72,3 +72,7 @@ String Compass::lcd_second_line() {
     }
     return String(n);
 }
+
+void Compass::draw_on_oled_screen(Adafruit_SSD1351 oled, int oled_width, int oled_heigh) {
+
+}

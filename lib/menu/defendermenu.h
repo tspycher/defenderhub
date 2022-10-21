@@ -5,7 +5,20 @@
 #ifndef DEFENDERHUB_DEFENDERMENU_H
 #define DEFENDERHUB_DEFENDERMENU_H
 
-#include <Waveshare_LCD1602_RGB.h>
+#define BLACK           0x0000
+#define BLUE            0x001F
+#define RED             0xF800
+#define GREEN           0x07E0
+#define CYAN            0x07FF
+#define MAGENTA         0xF81F
+#define YELLOW          0xFFE0
+#define WHITE           0xFFFF
+
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1351.h>
+#include <SPI.h>
+#include <SoftwareSerial.h>
+#include <TinyGPSPlus.h>
 #include "page.h"
 #include "sound.h"
 
@@ -19,6 +32,17 @@ struct UnitConfig {
     int piezo_pin;
     bool with_sound;
 
+    int oled_sclk_pin;
+    int oled_mosi_pin;
+    int oled_dc_pin;
+    int oled_cs_pin;
+    int oled_rst_pin;
+    int oled_screen_width = 128;
+    int oled_screen_height = 128;
+
+    int gps_rx;
+    int gps_tx;
+    int gps_baud = 9600;
 };
 
 class DefenderMenu {
@@ -27,6 +51,7 @@ public:
     void welcome_screen(int delay_seconds=2);
     void update_lcd(void);
     void update_lcd_gauge(void);
+    void update_gps(bool debug);
     void show_message(char *message, int delay_ms=2000);
 
     void update_current_page_data();
@@ -41,8 +66,15 @@ private:
     int num_pages;
     int current_page = 0;
     UnitConfig unitconfig;
+    bool oled_ready;
+    bool lcd_ready;
+    bool gps_ready;
     void display_animated_text(String text, int row, int step_ms = 100);
-    Waveshare_LCD1602_RGB *lcd;
+
+    void draw_base_menu();
+    Adafruit_SSD1351 *oled;
+    SoftwareSerial *gps_serial;
+    TinyGPSPlus *gps;
     int total_pages();
     Sound *sound;
     Page *pages[4];

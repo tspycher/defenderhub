@@ -4,11 +4,20 @@
 #include <MemoryUsage.h>
 
 #include <Wire.h>
-#define LED_BUILTIN 13
 #define PSEUDO_THREADS 2
 #define BUTTON 3 // with interrupt
 #define PIEZO_PIN 5
 #define ONEWIRE_PIN 4
+
+#define OLED_SCLK_PIN 12
+#define OLED_MOSI_PIN 11
+#define OLED_DC_PIN   7
+#define OLED_CS_PIN   10
+#define OLED_RST_PIN  8
+
+#define GPS_RX 9
+#define GPS_TX 6
+#define GPS_BAUD 9600
 
 #define SERIAL_BAUD 115200 // 9600
 
@@ -17,21 +26,14 @@
 #define BUTTON_VERY_LONG_PRESS 5000
 
 //const unsigned long UPDATE_TIMER = 10 * 1000;
-const unsigned long UPDATE2_TIMER = 0.1 * 1000;
-
-
-int alive_led_state;
+const unsigned long UPDATE2_TIMER = 1 * 1000;
 int previous_free_ram = 0;
 unsigned long looper = 0;
 long int last_button_signal = 0;
 long int last_button_press = 0;
 
-
 DefenderMenu *defender_menu;
 Equipment *equipment;
-
-
-
 
 void button_pressed() {
     Serial.println("BUTTON PRESSED");
@@ -54,6 +56,11 @@ void button_debouncer() {
 }
 
 void setup() {
+    // START SERIAL
+    Serial.begin(SERIAL_BAUD);
+    Serial.println("**** Serial Initialized ****");
+    Serial.println("**** Starting Up ****");
+
     // CONFIGURING RELAYS
     /*struct Relay relay0 = {0,0, (char*)"Radio"};
     struct Relay relay1 = {1,1, (char*)"Light1"};
@@ -75,22 +82,33 @@ void setup() {
     config.one_wire_bus_pin = ONEWIRE_PIN;
     config.with_sound = false;
 
+    config.oled_cs_pin = OLED_CS_PIN;
+    config.oled_dc_pin = OLED_DC_PIN;
+    config.oled_mosi_pin = OLED_MOSI_PIN;
+    config.oled_rst_pin = OLED_RST_PIN;
+    config.oled_sclk_pin = OLED_SCLK_PIN;
+
+    config.gps_baud = GPS_BAUD;
+    config.gps_rx = GPS_RX;
+    config.gps_tx = GPS_TX;
+
+    Serial.println("**** Basic config done ****");
+
+
     // CONFIGURE PINS
-    pinMode(LED_BUILTIN, OUTPUT);
     pinMode(BUTTON, INPUT_PULLUP);
     attachInterrupt(digitalPinToInterrupt(BUTTON), button_debouncer, RISING);
-    digitalWrite(LED_BUILTIN, LOW);
-    alive_led_state = LOW;
-
-    // START SERIAL
-    Serial.begin(SERIAL_BAUD);
+    Serial.println("**** Hardware Pin Configured ****");
 
     // INITIALIZING APPLICATION
-    Serial.println("**** Defender Hub started ****");
+    Serial.println("**** Menu Initializing started ****");
     defender_menu = new DefenderMenu(config);
     defender_menu->welcome_screen(1);
     defender_menu->switch_page(0);
     defender_menu->update_lcd();
+    Serial.println("**** Menu Fully Loaded ****");
+
+    Serial.println("**** Setup Completed ****");
 }
 
 void memory_state() {
@@ -101,16 +119,6 @@ void memory_state() {
         FREERAM_PRINT;
     }
     previous_free_ram = mu_freeRam();
-}
-
-void toggle_alive_led() {
-    if (alive_led_state == LOW) {
-        digitalWrite(LED_BUILTIN, HIGH);
-        alive_led_state = HIGH;
-    } else {
-        digitalWrite(LED_BUILTIN, LOW);
-        alive_led_state = LOW;
-    }
 }
 
 // Helper Function to switch equipment and display message
@@ -131,11 +139,11 @@ void switch_equipment(bool on, int index) {
 // Pseudo Thread 0 Loop, Slow Update
 void loop_thread0() { // Slow Thread
     if (millis() % (defender_menu->get_page()->refreshrate_seconds() * 1000) == 0) {
+        Serial.println("**** Thread 0 ****");
         defender_menu->get_page()->update_values();
         if (defender_menu->get_page()->needs_lcd_update()) {
             //memory_state();
-            toggle_alive_led();
-            defender_menu->update_lcd();
+            //defender_menu->update_lcd();
         }
     }
 }
@@ -144,9 +152,11 @@ void loop_thread0() { // Slow Thread
 void loop_thread1() { // Fast Thread
     defender_menu->perform_interrupt_switch_page();
     if (millis() % UPDATE2_TIMER == 0) {
+        Serial.println("**** Thread 1 ****");
+        defender_menu->update_gps(true);
         if (defender_menu->type_of_current_page() == PAGE_TYPE_GAUGE) {
-            defender_menu->update_current_page_data();
-            defender_menu->update_lcd_gauge();
+            //defender_menu->update_current_page_data();
+            //defender_menu->update_lcd_gauge();
         }
     }
 }
@@ -154,11 +164,10 @@ void loop_thread1() { // Fast Thread
 
 void loop() {
     int thread = looper % PSEUDO_THREADS;
-
     // Loop-Switching to simulate multi threading
     switch (thread) {
         case 0:
-            loop_thread0();
+            //loop_thread0();
             break;
         case 1:
             loop_thread1();
@@ -167,8 +176,6 @@ void loop() {
             Serial.println("No thread registered for id: "+thread);
             break;
     }
-
     //equipment->check_button_states();
-
     ++looper;
 }

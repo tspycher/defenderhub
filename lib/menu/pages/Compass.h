@@ -12,6 +12,8 @@ public:
     Compass();
     String lcd_first_line() override;
     String lcd_second_line() override;
+    void draw_on_oled_screen(Adafruit_SSD1351 oled, int oled_width, int oled_heigh) override;
+
     void update_values() override;
     int refreshrate_seconds() override;
     bool needs_lcd_update() override;
