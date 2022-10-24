@@ -180,21 +180,21 @@ DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig
     gps_ready = true;
     Serial.println("--> GPS Initialized");
 
-    pages[0] = new GpsPosition(gps);
+    pages[0] = new EnvironmentTemperature(unitconfig.one_wire_bus_pin);
+    Serial.println("----> EnvironmentTemperature Page Loaded");
+
+    pages[1] = new GpsPosition(gps);
     Serial.println("----> GpsPosition Page Loaded");
 
-    pages[1] = new Version();
+    pages[2] = new Version();
     Serial.println("----> Version Page Loaded");
 
     /*
-    //pages[1] = new EnvironmentTemperature(unitconfig.one_wire_bus_pin);
-    //Serial.println("----> EnvironmentTemperature Page Loaded");
-
     pages[1] = new Compass();
     Serial.println("----> Compass Page Loaded");
     */
 
-    num_pages = 2; //sizeof(&pages)/sizeof(pages[0]);
+    num_pages = 3; //sizeof(&pages)/sizeof(pages[0]);
     Serial.println("--> Pages Configured");
 }
 
