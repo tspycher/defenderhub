@@ -140,7 +140,9 @@ void switch_equipment(bool on, int index) {
 void loop_thread0() { // Slow Thread
     if (millis() % (defender_menu->get_page()->refreshrate_seconds() * 1000) == 0) {
         Serial.println("**** Thread 0 ****");
+
         defender_menu->get_page()->update_values();
+
         if (defender_menu->get_page()->needs_lcd_update()) {
             //memory_state();
             defender_menu->update_lcd();
@@ -153,7 +155,7 @@ void loop_thread1() { // Fast Thread
     defender_menu->perform_interrupt_switch_page();
     if (millis() % UPDATE2_TIMER == 0) {
         //Serial.println("**** Thread 1 ****");
-        defender_menu->update_gps(false);
+        defender_menu->update_gps(true);
 
         if (defender_menu->type_of_current_page() == PAGE_TYPE_GAUGE) {
             //defender_menu->update_current_page_data();
@@ -168,7 +170,7 @@ void loop() {
     // Loop-Switching to simulate multi threading
     switch (thread) {
         case 0:
-            //loop_thread0();
+            loop_thread0();
             break;
         case 1:
             loop_thread1();

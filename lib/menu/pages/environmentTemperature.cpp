@@ -37,6 +37,6 @@ String EnvironmentTemperature::lcd_second_line() {
     return "Inside:   " + (String)tmp_inside + (char)223;
 }
 
-void EnvironmentTemperature::draw_on_oled_screen(Adafruit_SSD1351 oled, int oled_width, int oled_heigh) {
+void EnvironmentTemperature::draw_on_oled_screen(Adafruit_SSD1351 &oled, int oled_width, int oled_heigh) {
 
 }

@@ -361,4 +361,8 @@ void DefenderMenu::update_gps(bool debug=false) {
         if (debug)
             Serial.write(raw_gps_data);
     }
+    Serial.print("Latitude: ");
+    Serial.print(gps->location.lat());
+    Serial.print(" Longitude: ");
+    Serial.println(gps->location.lng());
 }

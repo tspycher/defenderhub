@@ -10,10 +10,22 @@
 
 class GpsPosition : public Page {
 public:
-    GpsPosition(TinyGPSPlus *gps) : gps(gps), lat(0.0), lng(0.0), alt(0), course(0), speed(0), satellites(0) {};
+    GpsPosition(TinyGPSPlus *gps) : gps(gps),
+        lat(0.0),
+        lng(0.0),
+        alt(0.0),
+        course(0.0),
+        speed(0.0),
+        satellites(0),
+        previous_lat(0.0),
+        previous_lng(0.0),
+        previous_alt(0.0),
+        previous_course(0.0),
+        previous_speed(0.0),
+        previous_satellites(0) {};
     String lcd_first_line() override;
     String lcd_second_line() override;
-    void draw_on_oled_screen(Adafruit_SSD1351 oled, int oled_width, int oled_heigh) override;
+    void draw_on_oled_screen(Adafruit_SSD1351 &oled, int oled_width, int oled_heigh) override;
     String get_page_name() override;
     void update_values() override;
     int refreshrate_seconds() override;
