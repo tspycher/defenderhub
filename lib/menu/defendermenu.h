@@ -21,38 +21,17 @@
 #include <TinyGPSPlus.h>
 #include "page.h"
 #include "sound.h"
+#include <Car.h>
 
-struct UnitConfig {
-    uint8_t lcd_red=0;
-    uint8_t lcd_green=0;
-    uint8_t lcd_blue=0;
-    int lcd_cols = 16;
-    int lcd_rows = 2;
-    int one_wire_bus_pin;
-    int piezo_pin;
-    bool with_sound;
-
-    int oled_sclk_pin;
-    int oled_mosi_pin;
-    int oled_dc_pin;
-    int oled_cs_pin;
-    int oled_rst_pin;
-    int oled_screen_width = 128;
-    int oled_screen_height = 128;
-
-    int gps_rx;
-    int gps_tx;
-    int gps_baud = 9600;
-};
 
 class DefenderMenu {
 public:
-    DefenderMenu(struct UnitConfig unitconfig);//int lcd_rs=11, int lcd_enable=12, int lcd_d0=8, int lcd_d1=7, int lcd_d2=6, int lcd_d3=5);
+    DefenderMenu(Car &car, UnitConfig &unitConfig);//int lcd_rs=11, int lcd_enable=12, int lcd_d0=8, int lcd_d1=7, int lcd_d2=6, int lcd_d3=5);
     void welcome_screen(int delay_seconds=2);
     void update_lcd(void);
     void update_lcd_gauge(void);
     void update_gps(bool debug);
-    void show_message(char *message, int delay_ms=2000);
+    void show_message(const char message[], int delay_ms=2000);
 
     void update_current_page_data();
     void switch_page_by_interrupt();
@@ -63,9 +42,10 @@ public:
     int type_of_current_page();
     Page *get_page();
 private:
+    Car &car;
     int num_pages;
     int current_page = 0;
-    UnitConfig unitconfig;
+    UnitConfig &unitconfig;
     bool oled_ready;
     bool lcd_ready;
     bool gps_ready;

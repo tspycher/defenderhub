@@ -6,7 +6,7 @@
 #define DEFENDERHUB_ENVIRONMENTTEMPERATURE_H
 
 #include <Page.h>
-#include <sensorEnvironmentTemperature.h>
+//#include <sensorEnvironmentTemperature.h>
 
 class EnvironmentTemperature : public Page {
 public:
@@ -20,7 +20,7 @@ public:
     bool needs_lcd_update() override;
 
 private:
-    SensorEnvironmentTemperature *sensor;
+    //SensorEnvironmentTemperature *sensor;
     double tmp_inside;
     double tmp_outside;
     double previous_tmp_inside;

@@ -2,9 +2,10 @@
 #include <defendermenu.h>
 #include <Equipment.h>
 #include <MemoryUsage.h>
-
+#include <Car.h>
 #include <Wire.h>
-#define PSEUDO_THREADS 2
+
+#define PSEUDO_THREADS 3
 #define BUTTON 3 // with interrupt
 #define PIEZO_PIN 5
 #define ONEWIRE_PIN 4
@@ -25,18 +26,24 @@
 #define BUTTON_LONG_PRESS 3000
 #define BUTTON_VERY_LONG_PRESS 5000
 
-//const unsigned long UPDATE_TIMER = 10 * 1000;
-const unsigned long UPDATE2_TIMER = 1 * 1000;
+//const unsigned long UPDATE0_TIMER = 10 * 1000;
+const unsigned long UPDATE1_TIMER = 0.5 * 1000;
+const unsigned long UPDATE2_TIMER = 5 * 1000;
+
 int previous_free_ram = 0;
 unsigned long looper = 0;
 long int last_button_signal = 0;
 long int last_button_press = 0;
 
+Car *car;
 DefenderMenu *defender_menu;
 Equipment *equipment;
+struct UnitConfig config;
+
 
 void button_pressed() {
     Serial.println("BUTTON PRESSED");
+    defender_menu->show_message("Switch Page");
     defender_menu->switch_page_by_interrupt();
     Serial.println(defender_menu->get_current_page());
 }
@@ -76,7 +83,6 @@ void setup() {
     //equipment = new Equipment(relays, sizeof relays / sizeof relays[0]);
 
     // CONFIGURE THE DISPLAY
-    struct UnitConfig config;
     config.lcd_green = 100;
     config.piezo_pin = PIEZO_PIN;
     config.one_wire_bus_pin = ONEWIRE_PIN;
@@ -94,15 +100,19 @@ void setup() {
 
     Serial.println("**** Basic config done ****");
 
-
     // CONFIGURE PINS
     pinMode(BUTTON, INPUT_PULLUP);
     attachInterrupt(digitalPinToInterrupt(BUTTON), button_debouncer, RISING);
     Serial.println("**** Hardware Pin Configured ****");
 
+    // INITIALIZING CAR
+    Serial.println("**** Car Initializing started ****");
+    car = new Car(config);
+    Serial.println("**** Car Fully Loaded ****");
+
     // INITIALIZING APPLICATION
     Serial.println("**** Menu Initializing started ****");
-    defender_menu = new DefenderMenu(config);
+    defender_menu = new DefenderMenu(*car, *car->get_unitconfig());
     defender_menu->welcome_screen(1);
     defender_menu->switch_page(0);
     defender_menu->update_lcd();
@@ -136,7 +146,7 @@ void switch_equipment(bool on, int index) {
     }
 }
 
-// Pseudo Thread 0 Loop, Slow Update
+// Pseudo Thread 0 Loop, Page Updates
 void loop_thread0() { // Slow Thread
     if (millis() % (defender_menu->get_page()->refreshrate_seconds() * 1000) == 0) {
         Serial.println("**** Thread 0 ****");
@@ -153,14 +163,19 @@ void loop_thread0() { // Slow Thread
 // Pseudo Thread 1 Loop, Fast Update
 void loop_thread1() { // Fast Thread
     defender_menu->perform_interrupt_switch_page();
-    if (millis() % UPDATE2_TIMER == 0) {
-        //Serial.println("**** Thread 1 ****");
-        defender_menu->update_gps(true);
-
+    if (millis() % UPDATE1_TIMER == 0) {
         if (defender_menu->type_of_current_page() == PAGE_TYPE_GAUGE) {
             //defender_menu->update_current_page_data();
             //defender_menu->update_lcd_gauge();
         }
+    }
+}
+
+// Pseudo Thread 2 Loop, Middle update for updating environment data
+void loop_thread2() { // Fast Thread
+    if (millis() % UPDATE2_TIMER == 0) {
+        //Serial.println("**** Thread 2 ****");
+        defender_menu->update_gps(true);
     }
 }
 
@@ -174,6 +189,9 @@ void loop() {
             break;
         case 1:
             loop_thread1();
+            break;
+        case 2:
+            loop_thread2();
             break;
         default:
             Serial.println("No thread registered for id: "+thread);

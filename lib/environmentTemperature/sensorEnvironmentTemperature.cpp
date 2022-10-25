@@ -12,6 +12,9 @@ SensorEnvironmentTemperature::SensorEnvironmentTemperature(int onewirebus, uint8
 }
 
 float SensorEnvironmentTemperature::get_temperature_for_index(uint8_t index) {
+    //sensors->requestTemperatures();
+
+    return 0.0;
     sensors->requestTemperatures();
     float temp = sensors->getTempCByIndex(index);
     Serial.print("Requested Temperature at Index ");

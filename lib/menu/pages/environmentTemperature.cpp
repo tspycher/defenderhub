@@ -7,7 +7,6 @@
 
 EnvironmentTemperature::EnvironmentTemperature(int onewirebus): tmp_inside(21.5), tmp_outside(4.3), previous_tmp_inside(0.0), previous_tmp_outside(0.0) {
     //sensor = new SensorEnvironmentTemperature(onewirebus);
-    //update_values();
 }
 
 String EnvironmentTemperature::get_page_name() {
@@ -28,6 +27,7 @@ int EnvironmentTemperature::refreshrate_seconds() {
 void EnvironmentTemperature::update_values() {
     /*previous_tmp_inside = tmp_inside;
     previous_tmp_outside = tmp_outside;
+
     tmp_inside = sensor->get_temperature_inside();
     tmp_outside = sensor->get_temperature_outside();
      */

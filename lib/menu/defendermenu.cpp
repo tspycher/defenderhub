@@ -149,9 +149,8 @@ const unsigned char small_logo [] PROGMEM = {
         0x00, 0x07, 0xff, 0x7b, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig), oled_ready(false), lcd_ready(false), gps_ready(false) {
+DefenderMenu::DefenderMenu(Car &car, UnitConfig &unitConfig) : car(car), unitconfig(unitConfig), oled_ready(false), lcd_ready(false), gps_ready(false) {
     Serial.println("--> Starting up Menu");
-
     //lcd = new Waveshare_LCD1602_RGB(unitconfig.lcd_cols,unitconfig.lcd_rows);  //16 characters and 2 lines of show
     /*lcd->init();
     lcd->noCursor();
@@ -180,13 +179,13 @@ DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig
     gps_ready = true;
     Serial.println("--> GPS Initialized");
 
-    pages[0] = new EnvironmentTemperature(unitconfig.one_wire_bus_pin);
-    Serial.println("----> EnvironmentTemperature Page Loaded");
+    //pages[0] = new EnvironmentTemperature(unitconfig.one_wire_bus_pin);
+    //Serial.println("----> EnvironmentTemperature Page Loaded");
 
-    pages[1] = new GpsPosition(gps);
+    pages[0] = new GpsPosition(gps);
     Serial.println("----> GpsPosition Page Loaded");
 
-    pages[2] = new Version();
+    pages[1] = new Version();
     Serial.println("----> Version Page Loaded");
 
     /*
@@ -194,7 +193,7 @@ DefenderMenu::DefenderMenu(struct UnitConfig unitconfig) : unitconfig(unitconfig
     Serial.println("----> Compass Page Loaded");
     */
 
-    num_pages = 3; //sizeof(&pages)/sizeof(pages[0]);
+    num_pages = 2; //sizeof(&pages)/sizeof(pages[0]);
     Serial.println("--> Pages Configured");
 }
 
@@ -202,16 +201,24 @@ void DefenderMenu::update_current_page_data() {
     get_page()->update_values();
 }
 
-void DefenderMenu::show_message(char *message, int delay_ms) {
-    /*lcd->clear();
-    lcd->blink();
-    lcd->noCursor();
-    lcd->setCursor(0, 0);
-    display_animated_text(String("*** MESSAGE ****"), 0, 50);
-    lcd->setCursor(0, 1);
-    lcd->send_string(message);
-    delay(delay_ms);
-    update_lcd();*/
+void DefenderMenu::show_message(const char message[], int delay_ms) {
+    if (oled_ready) {
+        oled->setCursor(0, 128/2);
+        oled->setTextColor(RED);
+        oled->setTextSize(1);
+        oled->print(message);
+    }
+    if (lcd_ready) {
+        /*lcd->clear();
+        lcd->blink();
+        lcd->noCursor();
+        lcd->setCursor(0, 0);
+        display_animated_text(String("*** MESSAGE ****"), 0, 50);
+        lcd->setCursor(0, 1);
+        lcd->send_string(message);
+        delay(delay_ms);
+        update_lcd();*/
+    }
 }
 
 void DefenderMenu::display_animated_text(String text, int row, int step_ms) {
