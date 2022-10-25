@@ -29,7 +29,6 @@ public:
     void welcome_screen(int delay_seconds=2);
     void update_lcd(void);
     void update_lcd_gauge(void);
-    void update_gps(bool debug);
     void show_message(const char message[], int delay_ms=2000);
 
     void update_current_page_data();

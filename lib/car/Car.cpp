@@ -48,3 +48,27 @@ void Car::update_gps(bool debug) {
     Serial.print(" Longitude: ");
     Serial.println(gps->location.lng());
 }
+
+double Car::get_latitude(){
+    return gps->location.lat();
+}
+
+double Car::get_longitude(){
+    return gps->location.lng();
+}
+
+double Car::get_gpsspeed(){
+    return gps->speed.kmph();
+}
+
+double Car::get_altitude() {
+    return gps->altitude.meters();
+}
+
+double Car::get_course(){
+    return gps->course.deg();
+}
+
+int Car::get_satellites(){
+    return gps->satellites.value();
+}

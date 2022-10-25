@@ -177,7 +177,7 @@ DefenderMenu::DefenderMenu(Car &car, UnitConfig &unitConfig) : car(car), unitcon
     //pages[0] = new EnvironmentTemperature(unitconfig.one_wire_bus_pin);
     //Serial.println("----> EnvironmentTemperature Page Loaded");
 
-    pages[0] = new GpsPosition(car.get_gps());
+    pages[0] = new GpsPosition(car);
     Serial.println("----> GpsPosition Page Loaded");
 
     pages[1] = new Version();
@@ -351,8 +351,4 @@ void DefenderMenu::perform_interrupt_switch_page() {
         switch_page();
         update_lcd();
     }
-}
-
-void DefenderMenu::update_gps(bool debug=false) {
-    car.update_gps(debug);
 }

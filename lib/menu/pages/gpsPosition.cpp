@@ -30,7 +30,7 @@ bool GpsPosition::needs_lcd_update() {
     if(previous_satellites != satellites)
         return true;
     */
-    return gps->location.isUpdated();
+    return true;
     //return false;
 }
 
@@ -45,12 +45,11 @@ void GpsPosition::update_values() {
 
 
 void GpsPosition::draw_on_oled_screen(Adafruit_SSD1351 &oled, int oled_width, int oled_heigh) {
-    update_label(oled, "Latitude", gps->location.lat(), 0, 20, 7);
-    update_label(oled, "Longitude", gps->location.lng(), 128 / 2, 20, 7);
+    update_label(oled, "Latitude", car.get_latitude(), 0, 20, 7);
+    update_label(oled, "Longitude", car.get_longitude(), 128 / 2, 20, 7);
 
-    update_label(oled, "Alt(m)", gps->altitude.meters(), 0,60,7);
-    update_label(oled, "Speed", gps->speed.kmph(), 0,85,7);
-    update_label(oled, "Course", gps->course.deg(), 128/2,60,7);
-    update_label(oled, "Satellites", (const int)gps->satellites.value(), 128/2,85,7);
-
+    update_label(oled, "Alt(m)", car.get_altitude(), 0,60,7);
+    update_label(oled, "Speed", car.get_gpsspeed(), 0,85,7);
+    update_label(oled, "Course", car.get_course(), 128/2,60,7);
+    update_label(oled, "Satellites", car.get_satellites(), 128/2,85,7);
 }

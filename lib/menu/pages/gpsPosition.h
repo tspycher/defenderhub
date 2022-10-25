@@ -7,10 +7,12 @@
 
 #include <Page.h>
 #include <TinyGPSPlus.h>
+#include <Car.h>
+
 
 class GpsPosition : public Page {
 public:
-    GpsPosition(TinyGPSPlus *gps) : gps(gps),
+    GpsPosition(Car &car) : car(car),
         lat(0.0),
         lng(0.0),
         alt(0.0),
@@ -31,7 +33,7 @@ public:
     int refreshrate_seconds() override;
     bool needs_lcd_update() override;
 private:
-    TinyGPSPlus *gps;
+    Car &car;
     double lat;
     double lng;
     double alt;

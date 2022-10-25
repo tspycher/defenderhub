@@ -175,7 +175,7 @@ void loop_thread1() { // Fast Thread
 void loop_thread2() { // Fast Thread
     if (millis() % UPDATE2_TIMER == 0) {
         //Serial.println("**** Thread 2 ****");
-        defender_menu->update_gps(true);
+        car->update_gps(true);
     }
 }
 

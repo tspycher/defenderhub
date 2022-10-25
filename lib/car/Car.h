@@ -42,6 +42,12 @@ public:
     bool is_gps_ready();
     TinyGPSPlus *get_gps();
     void update_gps(bool debug=false);
+    double get_latitude();
+    double get_longitude();
+    double get_gpsspeed();
+    double get_altitude();
+    double get_course();
+    int get_satellites();
 private:
     UnitConfig &unitconfig;
     SoftwareSerial *gps_serial;
