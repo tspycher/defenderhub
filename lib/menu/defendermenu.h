@@ -17,8 +17,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1351.h>
 #include <SPI.h>
-#include <SoftwareSerial.h>
-#include <TinyGPSPlus.h>
+
 #include "page.h"
 #include "sound.h"
 #include <Car.h>
@@ -48,13 +47,11 @@ private:
     UnitConfig &unitconfig;
     bool oled_ready;
     bool lcd_ready;
-    bool gps_ready;
     void display_animated_text(String text, int row, int step_ms = 100);
 
     void draw_base_menu();
     Adafruit_SSD1351 *oled;
-    SoftwareSerial *gps_serial;
-    TinyGPSPlus *gps;
+
     int total_pages();
     Sound *sound;
     Page *pages[4];

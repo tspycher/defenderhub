@@ -6,6 +6,8 @@
 #define DEFENDERHUB_CAR_H
 
 #include <Adafruit_GFX.h>
+#include <SoftwareSerial.h>
+#include <TinyGPSPlus.h>
 
 struct UnitConfig {
     uint8_t lcd_red=0;
@@ -37,9 +39,14 @@ public:
     double get_temperature_inside();
     double get_temperature_outside();
     UnitConfig *get_unitconfig();
-
+    bool is_gps_ready();
+    TinyGPSPlus *get_gps();
+    void update_gps(bool debug=false);
 private:
     UnitConfig &unitconfig;
+    SoftwareSerial *gps_serial;
+    TinyGPSPlus *gps;
+    bool gps_ready;
 
 };
 

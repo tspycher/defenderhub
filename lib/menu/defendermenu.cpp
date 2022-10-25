@@ -149,7 +149,7 @@ const unsigned char small_logo [] PROGMEM = {
         0x00, 0x07, 0xff, 0x7b, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-DefenderMenu::DefenderMenu(Car &car, UnitConfig &unitConfig) : car(car), unitconfig(unitConfig), oled_ready(false), lcd_ready(false), gps_ready(false) {
+DefenderMenu::DefenderMenu(Car &car, UnitConfig &unitConfig) : car(car), unitconfig(unitConfig), oled_ready(false), lcd_ready(false) {
     Serial.println("--> Starting up Menu");
     //lcd = new Waveshare_LCD1602_RGB(unitconfig.lcd_cols,unitconfig.lcd_rows);  //16 characters and 2 lines of show
     /*lcd->init();
@@ -164,9 +164,7 @@ DefenderMenu::DefenderMenu(Car &car, UnitConfig &unitConfig) : car(car), unitcon
     oled = new Adafruit_SSD1351(unitconfig.oled_screen_width, unitconfig.oled_screen_height, unitconfig.oled_cs_pin, unitconfig.oled_dc_pin, unitconfig.oled_mosi_pin, unitconfig.oled_sclk_pin, unitconfig.oled_rst_pin);
     Serial.println("--> OLED Configured");
 
-    gps_serial = new SoftwareSerial(unitconfig.gps_tx, unitconfig.gps_rx);
-    gps = new TinyGPSPlus();
-    Serial.println("--> GPS Configured");
+
 
     // init OLED
     oled->begin();
@@ -174,15 +172,12 @@ DefenderMenu::DefenderMenu(Car &car, UnitConfig &unitConfig) : car(car), unitcon
     oled_ready = true;
     Serial.println("--> OLED Initialized");
 
-    // init GPS
-    gps_serial->begin(unitconfig.gps_baud);
-    gps_ready = true;
-    Serial.println("--> GPS Initialized");
+
 
     //pages[0] = new EnvironmentTemperature(unitconfig.one_wire_bus_pin);
     //Serial.println("----> EnvironmentTemperature Page Loaded");
 
-    pages[0] = new GpsPosition(gps);
+    pages[0] = new GpsPosition(car.get_gps());
     Serial.println("----> GpsPosition Page Loaded");
 
     pages[1] = new Version();
@@ -359,17 +354,5 @@ void DefenderMenu::perform_interrupt_switch_page() {
 }
 
 void DefenderMenu::update_gps(bool debug=false) {
-    if(!gps_ready)
-        return;
-
-    while (gps_serial->available() > 0) {
-        unsigned char raw_gps_data = gps_serial->read();
-        gps->encode(raw_gps_data);
-        if (debug)
-            Serial.write(raw_gps_data);
-    }
-    Serial.print("Latitude: ");
-    Serial.print(gps->location.lat());
-    Serial.print(" Longitude: ");
-    Serial.println(gps->location.lng());
+    car.update_gps(debug);
 }
