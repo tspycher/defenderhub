@@ -149,7 +149,7 @@ const unsigned char small_logo [] PROGMEM = {
         0x00, 0x07, 0xff, 0x7b, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-DefenderMenu::DefenderMenu(Car& car, UnitConfig& unitConfig) : car(car), unitconfig(unitConfig), oled_ready(false), lcd_ready(false) {
+DefenderMenu::DefenderMenu(Car& car, UnitConfig& unitConfig) : car(car), unitconfig(unitConfig), oled_ready(false), lcd_ready(false), interrupt_switch_page(false) {
     Serial.println("--> Starting up Menu");
     //lcd = new Waveshare_LCD1602_RGB(unitconfig.lcd_cols,unitconfig.lcd_rows);  //16 characters and 2 lines of show
     /*lcd->init();
@@ -383,6 +383,10 @@ void DefenderMenu::switch_page_by_interrupt() {
 
 bool DefenderMenu::perform_interrupt_switch_page() {
     if (interrupt_switch_page) {
+        // fix for: sometimes the display "crashes" and is disabled or shows inverted colors...
+        oled->enableDisplay(true);
+        oled->invertDisplay(false);
+
         interrupt_switch_page = false;
         switch_page();
         update_lcd();

@@ -59,7 +59,7 @@ private:
 
     int total_pages();
     Sound *sound;
-    bool interrupt_switch_page = false;
+    bool interrupt_switch_page;
     Page* pages[];
 };
 
