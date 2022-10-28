@@ -8,6 +8,10 @@
 #include <Adafruit_GFX.h>
 #include <SoftwareSerial.h>
 #include <TinyGPSPlus.h>
+#include <DallasTemperature.h>
+#include <OneWire.h>
+
+
 
 struct UnitConfig {
     uint8_t lcd_red=0;
@@ -18,6 +22,9 @@ struct UnitConfig {
     int one_wire_bus_pin;
     int piezo_pin;
     bool with_sound;
+    bool with_temperature;
+    int temperature_index_inside = 0;
+    int temperature_index_outside = 1;
 
     int oled_sclk_pin;
     int oled_mosi_pin;
@@ -38,21 +45,27 @@ public:
     Car(struct UnitConfig &unitconfig);//int lcd_rs=11, int lcd_enable=12, int lcd_d0=8, int lcd_d1=7, int lcd_d2=6, int lcd_d3=5);
     double get_temperature_inside();
     double get_temperature_outside();
-    UnitConfig *get_unitconfig();
+    UnitConfig& get_unitconfig();
     bool is_gps_ready();
     TinyGPSPlus *get_gps();
-    void update_gps(bool debug=false);
+    void update_gps(bool, int);
     double get_latitude();
     double get_longitude();
     double get_gpsspeed();
     double get_altitude();
     double get_course();
     int get_satellites();
+    bool is_gps_updated();
 private:
-    UnitConfig &unitconfig;
+    UnitConfig& unitconfig;
     SoftwareSerial *gps_serial;
     TinyGPSPlus *gps;
     bool gps_ready;
+    bool temperature_ready;
+
+    DallasTemperature *sensors;
+    OneWire *oneWire;
+    float get_temperature_for_index(uint8_t index);
 
 };
 

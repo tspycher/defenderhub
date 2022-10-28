@@ -3,7 +3,7 @@
 //
 
 #include "defendermenu.h"
-#include "pages/environmentTemperature.h"
+#include "pages/Temperature.h"
 #include "pages/gpsPosition.h"
 #include "pages/Compass.h"
 #include "pages/version.h"
@@ -149,7 +149,7 @@ const unsigned char small_logo [] PROGMEM = {
         0x00, 0x07, 0xff, 0x7b, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-DefenderMenu::DefenderMenu(Car &car, UnitConfig &unitConfig) : car(car), unitconfig(unitConfig), oled_ready(false), lcd_ready(false) {
+DefenderMenu::DefenderMenu(Car& car, UnitConfig& unitConfig) : car(car), unitconfig(unitConfig), oled_ready(false), lcd_ready(false) {
     Serial.println("--> Starting up Menu");
     //lcd = new Waveshare_LCD1602_RGB(unitconfig.lcd_cols,unitconfig.lcd_rows);  //16 characters and 2 lines of show
     /*lcd->init();
@@ -164,31 +164,32 @@ DefenderMenu::DefenderMenu(Car &car, UnitConfig &unitConfig) : car(car), unitcon
     oled = new Adafruit_SSD1351(unitconfig.oled_screen_width, unitconfig.oled_screen_height, unitconfig.oled_cs_pin, unitconfig.oled_dc_pin, unitconfig.oled_mosi_pin, unitconfig.oled_sclk_pin, unitconfig.oled_rst_pin);
     Serial.println("--> OLED Configured");
 
-
-
     // init OLED
     oled->begin();
     oled->fillScreen(BLACK);
     oled_ready = true;
     Serial.println("--> OLED Initialized");
 
-
-
-    //pages[0] = new EnvironmentTemperature(unitconfig.one_wire_bus_pin);
-    //Serial.println("----> EnvironmentTemperature Page Loaded");
-
-    pages[0] = new GpsPosition(car);
+    page1 = new GpsPosition(car);
     Serial.println("----> GpsPosition Page Loaded");
 
-    pages[1] = new Version();
+    page2 = new Temperature(car);
+    Serial.println("----> Temperature Page Loaded");
+
+    page3 = new Version(car);
     Serial.println("----> Version Page Loaded");
 
+    num_pages = 3;
+    //Page *p[3] = {&page_gps, &page_temperature, &page_version};
+    //pages[3] = *p;
+
+    //(*pages)[3] = {&page_gps, &page_temperature, &page_version};
     /*
     pages[1] = new Compass();
     Serial.println("----> Compass Page Loaded");
     */
 
-    num_pages = 2; //sizeof(&pages)/sizeof(pages[0]);
+     //sizeof(&pages)/sizeof(pages[0]);
     Serial.println("--> Pages Configured");
 }
 
@@ -196,12 +197,28 @@ void DefenderMenu::update_current_page_data() {
     get_page()->update_values();
 }
 
-void DefenderMenu::show_message(const char message[], int delay_ms) {
+void DefenderMenu::show_message(const char message[], const char message2[], int delay_ms) {
     if (oled_ready) {
-        oled->setCursor(0, 128/2);
+        int margin_top = 40;
+        int margin_left = 5;
+        int line_margin = 2;
+        // blackout background of the popup
+        oled->fillRect(margin_left, margin_top, unitconfig.oled_screen_width-(2*margin_left), unitconfig.oled_screen_height-(2*margin_top), BLACK);
+        // top
+        oled->drawFastHLine(margin_left+line_margin,margin_top+line_margin, unitconfig.oled_screen_width-(2*margin_left)-(2*line_margin), RED);
+        // bottom
+        oled->drawFastHLine(margin_left+line_margin,unitconfig.oled_screen_height-margin_top-line_margin, unitconfig.oled_screen_width-(2*margin_left)-(2*line_margin)+1, RED);
+        // left
+        oled->drawFastVLine(margin_left+line_margin,margin_top+line_margin, unitconfig.oled_screen_height-(2*margin_top)-(2*line_margin), RED);
+        // right
+        oled->drawFastVLine(unitconfig.oled_screen_width-margin_left-line_margin,margin_top+line_margin, unitconfig.oled_screen_height-(2*margin_top)-(2*line_margin)+1, RED);
+
         oled->setTextColor(RED);
         oled->setTextSize(1);
+        oled->setCursor(margin_left*3, unitconfig.oled_screen_height/2-3-7);
         oled->print(message);
+        oled->setCursor(margin_left*3, unitconfig.oled_screen_height/2-3+7);
+        oled->print(message2);
     }
     if (lcd_ready) {
         /*lcd->clear();
@@ -254,10 +271,6 @@ int DefenderMenu::type_of_current_page() {
     return get_page()->get_page_type();
 }
 
-Page * DefenderMenu::get_page() {
-    return pages[current_page];
-}
-
 void DefenderMenu::update_lcd_gauge() {
     /*lcd->setCursor(0, 0);
 
@@ -288,6 +301,8 @@ void DefenderMenu::update_lcd_gauge() {
 
 void DefenderMenu::draw_base_menu() {
     if(oled_ready) {
+        Serial.print("-->Drawing new Menu Page for: ");
+        Serial.println(get_page()->get_page_name());
         // header
         oled->fillScreen(BLACK);
         oled->setCursor(0, 3);
@@ -322,6 +337,21 @@ void DefenderMenu::update_lcd() {
     }
 }
 
+Page *DefenderMenu::get_page() {
+    switch (current_page) {
+        case 0:
+            return page1;
+        case 1:
+            return page2;
+        case 2:
+            return page3;
+        default:
+            switch_page(0);
+            return page1;
+    }
+    //eturn *pages[current_page];
+}
+
 int DefenderMenu::total_pages() {
     return num_pages;
 }
@@ -331,7 +361,9 @@ int DefenderMenu::get_current_page() {
 }
 
 void DefenderMenu::switch_page(int page) {
+    Serial.println(current_page);
     current_page = page % total_pages();
+    Serial.println(current_page);
     draw_base_menu();
 }
 
@@ -341,14 +373,20 @@ void DefenderMenu::switch_page() {
         sound->play_page_switch();
 }
 
+bool DefenderMenu::is_in_switch_page_state() {
+    return interrupt_switch_page;
+}
+
 void DefenderMenu::switch_page_by_interrupt() {
     interrupt_switch_page = true;
 }
 
-void DefenderMenu::perform_interrupt_switch_page() {
+bool DefenderMenu::perform_interrupt_switch_page() {
     if (interrupt_switch_page) {
         interrupt_switch_page = false;
         switch_page();
         update_lcd();
+        return true;
     }
+    return false;
 }

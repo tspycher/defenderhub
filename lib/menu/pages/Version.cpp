@@ -19,11 +19,11 @@ String Version::lcd_second_line() {
 }
 
 String Version::get_page_name() {
-    return "Version/Debug";
+    return "Version";
 }
 
 void Version::draw_on_oled_screen(Adafruit_SSD1351 &oled, int oled_width, int oled_heigh) {
-    update_label(oled, "Version", VERSION, 0,20,14);
-    update_label(oled, "Buildtime", BUILDTIME, 0,45,14);
-    update_label(oled, "Copyright", "TSpycher", 0,90,14);
+    update_label(oled, "Version", VERSION, 0,20,7, false);
+    update_label(oled, "Buildtime", BUILDTIME, 0,45,7, false);
+    update_label(oled, "Copyright", "TSpycher", 0,70,7, false);
 }

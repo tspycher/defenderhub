@@ -26,7 +26,7 @@
 #define BUTTON_LONG_PRESS 3000
 #define BUTTON_VERY_LONG_PRESS 5000
 
-//const unsigned long UPDATE0_TIMER = 10 * 1000;
+const unsigned long UPDATE0_TIMER = 1 * 1000;
 const unsigned long UPDATE1_TIMER = 0.5 * 1000;
 const unsigned long UPDATE2_TIMER = 5 * 1000;
 
@@ -38,17 +38,31 @@ long int last_button_press = 0;
 Car *car;
 DefenderMenu *defender_menu;
 Equipment *equipment;
+Page *current_page;
 struct UnitConfig config;
 
+void show_memory_usage() {
+    MEMORY_PRINT_START
+    MEMORY_PRINT_HEAPSTART
+    MEMORY_PRINT_HEAPEND
+    MEMORY_PRINT_STACKSTART
+    MEMORY_PRINT_END
+    MEMORY_PRINT_HEAPSIZE
+    FREERAM_PRINT;
+}
 
 void button_pressed() {
     Serial.println("BUTTON PRESSED");
-    defender_menu->show_message("Switch Page");
+    defender_menu->show_message("Next", "Page");
     defender_menu->switch_page_by_interrupt();
-    Serial.println(defender_menu->get_current_page());
 }
 
 void button_debouncer() {
+    noInterrupts();
+
+    if (defender_menu->is_in_switch_page_state())
+        return;
+
     int diff = millis() - last_button_signal;
     int diff2 = millis() - last_button_press;
 
@@ -63,6 +77,8 @@ void button_debouncer() {
 }
 
 void setup() {
+    noInterrupts();
+
     // START SERIAL
     Serial.begin(SERIAL_BAUD);
     Serial.println("**** Serial Initialized ****");
@@ -87,6 +103,7 @@ void setup() {
     config.piezo_pin = PIEZO_PIN;
     config.one_wire_bus_pin = ONEWIRE_PIN;
     config.with_sound = false;
+    config.with_temperature = false;
 
     config.oled_cs_pin = OLED_CS_PIN;
     config.oled_dc_pin = OLED_DC_PIN;
@@ -112,13 +129,16 @@ void setup() {
 
     // INITIALIZING APPLICATION
     Serial.println("**** Menu Initializing started ****");
-    defender_menu = new DefenderMenu(*car, *car->get_unitconfig());
+    defender_menu = new DefenderMenu(*car, car->get_unitconfig());
     defender_menu->welcome_screen(1);
     defender_menu->switch_page(0);
     defender_menu->update_lcd();
+    current_page = defender_menu->get_page();
+
     Serial.println("**** Menu Fully Loaded ****");
 
     Serial.println("**** Setup Completed ****");
+    interrupts();
 }
 
 void memory_state() {
@@ -138,44 +158,47 @@ void switch_equipment(bool on, int index) {
     if (on) {
         (String(equipment->get_name(index)) + String(" ON")).toCharArray(message, 16);
         equipment->turn_on(index);
-        defender_menu->show_message(message);
+        defender_menu->show_message("Equipment", message);
     } else {
         (String(equipment->get_name(index)) + String(" OFF")).toCharArray(message, 16);
         equipment->turn_off(index);
-        defender_menu->show_message(message);
+        defender_menu->show_message("Equipment", message);
     }
 }
 
 // Pseudo Thread 0 Loop, Page Updates
 void loop_thread0() { // Slow Thread
-    if (millis() % (defender_menu->get_page()->refreshrate_seconds() * 1000) == 0) {
+    /*if (millis() % (current_page->refreshrate_seconds() * 1000) == 0) {
         Serial.println("**** Thread 0 ****");
+        current_page->update_values();
 
-        defender_menu->get_page()->update_values();
-
-        if (defender_menu->get_page()->needs_lcd_update()) {
+        if (current_page->needs_display_update()) {
             //memory_state();
             defender_menu->update_lcd();
         }
-    }
+    }*/
 }
 
 // Pseudo Thread 1 Loop, Fast Update
 void loop_thread1() { // Fast Thread
-    defender_menu->perform_interrupt_switch_page();
     if (millis() % UPDATE1_TIMER == 0) {
-        if (defender_menu->type_of_current_page() == PAGE_TYPE_GAUGE) {
+        if(defender_menu->perform_interrupt_switch_page()) {
+            current_page = defender_menu->get_page();
+            show_memory_usage();
+            interrupts();
+        }
+
+        //if (defender_menu->type_of_current_page() == PAGE_TYPE_GAUGE) {
             //defender_menu->update_current_page_data();
             //defender_menu->update_lcd_gauge();
-        }
+        //}
     }
 }
 
 // Pseudo Thread 2 Loop, Middle update for updating environment data
 void loop_thread2() { // Fast Thread
     if (millis() % UPDATE2_TIMER == 0) {
-        //Serial.println("**** Thread 2 ****");
-        car->update_gps(true);
+        //car->update_gps(true, 2);
     }
 }
 

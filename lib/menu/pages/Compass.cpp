@@ -22,7 +22,7 @@ int int_at_position(int n, int p) {
     return n / pp;
 }
 
-Compass::Compass() : course(1) {
+Compass::Compass(Car& car) : Page(car), course(1) {
     for (int i = 0; i < 360; ++i) {
         if(i == 0) {
             needle[i] = "N";
@@ -40,7 +40,7 @@ Compass::Compass() : course(1) {
     }
 }
 
-bool Compass::needs_lcd_update() {
+bool Compass::needs_display_update() {
     if (previous_course != course) {
         return true;
     }

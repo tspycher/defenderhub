@@ -25,27 +25,33 @@
 
 class DefenderMenu {
 public:
-    DefenderMenu(Car &car, UnitConfig &unitConfig);//int lcd_rs=11, int lcd_enable=12, int lcd_d0=8, int lcd_d1=7, int lcd_d2=6, int lcd_d3=5);
+    DefenderMenu(Car& car, UnitConfig& unitConfig);//int lcd_rs=11, int lcd_enable=12, int lcd_d0=8, int lcd_d1=7, int lcd_d2=6, int lcd_d3=5);
     void welcome_screen(int delay_seconds=2);
     void update_lcd(void);
     void update_lcd_gauge(void);
-    void show_message(const char message[], int delay_ms=2000);
+    void show_message(const char message[], const char message2[], int delay_ms=2000);
 
     void update_current_page_data();
     void switch_page_by_interrupt();
-    void perform_interrupt_switch_page();
+    bool perform_interrupt_switch_page();
+    bool is_in_switch_page_state();
     void switch_page();
     void switch_page(int);
     int get_current_page();
     int type_of_current_page();
-    Page *get_page();
+    Page* get_page();
 private:
-    Car &car;
     int num_pages;
-    int current_page = 0;
-    UnitConfig &unitconfig;
+
+    Car& car;
+    UnitConfig& unitconfig;
     bool oled_ready;
     bool lcd_ready;
+
+    Page* page1;
+    Page* page2;
+    Page* page3;
+    int current_page = 0;
     void display_animated_text(String text, int row, int step_ms = 100);
 
     void draw_base_menu();
@@ -53,8 +59,8 @@ private:
 
     int total_pages();
     Sound *sound;
-    Page *pages[4];
     bool interrupt_switch_page = false;
+    Page* pages[];
 };
 
 #endif //DEFENDERHUB_DEFENDERMENU_H

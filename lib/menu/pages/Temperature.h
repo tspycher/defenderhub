@@ -1,15 +1,15 @@
 //
-// Created by Thomas Spycher on 14.10.22.
+// Created by Thomas Spycher on 26.10.22.
 //
 
-#ifndef DEFENDERHUB_VERSION_H
-#define DEFENDERHUB_VERSION_H
+#ifndef DEFENDERHUB_TEMPERATURE_H
+#define DEFENDERHUB_TEMPERATURE_H
 
 #include <Page.h>
 
-class Version : public Page {
+class Temperature : public Page {
 public:
-    Version(Car& car) : Page(car) {};
+    Temperature(Car& car) : Page(car) {};
 
     String lcd_first_line() override;
     String lcd_second_line() override;
@@ -20,4 +20,5 @@ public:
 };
 
 
-#endif //DEFENDERHUB_VERSION_H
+
+#endif //DEFENDERHUB_TEMPERATURE_H
